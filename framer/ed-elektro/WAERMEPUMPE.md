@@ -5,7 +5,8 @@ Umgesetzt im Framer-Projekt **ED-Elektro (Testseite)**, beide Seiten als Entwurf
 | Seite | Zweck |
 |---|---|
 | `/waermepumpe-rheinhessen` | Landingpage (Google-Ads-Ziel, SEO) – alle CTAs führen in den Funnel |
-| `/waermepumpe-angebot` | Funnel: Heizlast → Leistungsklasse → Preis → Vor-Ort-Termin |
+| `/waermepumpe-angebot` | Funnel: Heizlast → Leistungsklasse → Preis → Planungstermin |
+| `/waermepumpe-termin` | Sekundär-CTA „Direkt Planungstermin vereinbaren“: gleicher Funnel, startet direkt mit der Terminanfrage |
 
 Beide Seiten bauen auf den Klima-Seiten (`/klimaanlage-rheinhessen`, `/klimaanlage-angebot`) auf: gleicher Header, gleicher Footer, gleiche Code-Komponenten, gleiche Tonalität.
 
@@ -16,18 +17,25 @@ Beide Seiten bauen auf den Klima-Seiten (`/klimaanlage-rheinhessen`, `/klimaanla
 - **Förderung als Service:** ED stellt den Hauptantrag, der Kunde gibt danach nur noch seine Daten ein.
 - **Kernregionen:** Wörrstadt, Mainz, Alzey, Worms, Bad Kreuznach.
 
-## Landingpage – Aufbau
+## Landingpage – Aufbau (Stand Briefing 27.09.2026)
 
-1. Hero: „Wärmepumpe einbauen lassen – vom Meisterbetrieb aus Wörrstadt“ + CTA „Heizlast & Preis berechnen“ + Telefon
+Conversion-Weg in zwei Stufen: **Förderung verstehen → Preis online sehen → Planungstermin vor Ort.**
+Die Förderung wird als Full-Service kommuniziert – ED Elektro stellt den Antrag. Bewusst **kein Förderrechner**.
+
+1. Hero: „Wärmepumpe vom Elektro-Meister aus Wörrstadt“ · „Preis online sehen, Förderung erledigen wir, Planung persönlich vor Ort.“ · CTA „Preis berechnen“ + „Direkt Planungstermin vereinbaren“
 2. Vertrauensleiste (Meisterbetrieb, 12 Jahre, 3.000+ Aufträge, eigene Monteure)
-3. Rechner-Einstieg (CalculatorEntry → `/waermepumpe-angebot`)
-4. „Kennen Sie das?“ – Heizkosten, alte Heizung, Altbau, Förder-Dschungel, Vertriebsvermittler, keine Preistransparenz
-5. Ablauf in vier Schritten (online angeben → Heizlast & Preis → Telefonat → Vor-Ort-Termin, Angebot und Förderantrag)
-6. Einblicke (Bildergalerie)
-7. Leistungen: Luft-Wasser-Wärmepumpe (MHG), Warmwasser, Austausch der alten Heizung, Förderantrag und Wartung
-8. Fachbetrieb statt Vertriebsvermittler (Vergleich)
-9. Preis & Transparenz: ab 20.883 € brutto (6–8 kW ohne WW), was enthalten ist, was separat kommt
-10. Abschluss-CTA · Regionaler Beweis · FAQ (Altbau, Heizlast, Dauer, Förderung, Warmwasser, Einzugsgebiet) · Final-CTA
+3. **Modul A – Förderung** (`Foerderung.tsx`): „Bis zu 22.400 € Zuschuss für Ihre neue Heizung“, drei Kacheln (30 % Grund · +16 % Klima · +10–40 % Einkommen), statische Beispielrechnung in Euro, Full-Service-Block „Wir kümmern uns um den Antrag“ (3 Schritte), Stichtag- und Wichtig-Zeile, Fußnote. Sätze als Eigenschaften pflegbar (Änderung 2027).
+4. Rechner-Einstieg „Was kostet eine Wärmepumpe in Rheinhessen?“ (CalculatorEntry → `/waermepumpe-angebot`)
+5. **Modul C – Planungstermin** (`Planungstermin.tsx`): „Online sehen Sie den Preis. Vor Ort planen wir Ihre Anlage.“ – vier Prüfpunkte (Heizlast, Heizkörper/Vorlauf, Aufstellort/Schall, Stromanschluss/Zählerschrank), Nutzen-Zeile, CTA + Telefon
+6. „Kennen Sie das?“ – Heizkosten, alte Heizung, Altbau, Förder-Dschungel, Vertriebsvermittler, keine Preistransparenz
+7. Ablauf in vier Schritten (online angeben → Heizlast & Preis → Telefonat → Vor-Ort-Termin, Angebot und Förderantrag)
+8. Einblicke (Bildergalerie)
+9. Leistungen: Luft-Wasser-Wärmepumpe (MHG), Warmwasser, Austausch der alten Heizung, Förderantrag und Wartung
+10. Fachbetrieb statt Vertriebsvermittler (Vergleich)
+11. Preis & Transparenz: ab 20.883 € brutto (6–8 kW ohne WW), was enthalten ist, was separat kommt
+12. Abschluss-CTA · Regionaler Beweis · FAQ (Altbau, Heizlast, Dauer, Förderung, Warmwasser, Einzugsgebiet) · Final-CTA
+
+Mobil zusätzlich: **Sticky-Button** „Preis berechnen“ + Telefon-Icon (`StickyMobileCta.tsx`, ab Tablet ausgeblendet).
 
 ## Funnel – Fragen (bedingt, 6–8 Schritte je nach Antwort)
 
@@ -73,6 +81,10 @@ Alle Preise, Zuschläge und Annahmen sind in Framer als Eigenschaften der Kompon
 - „Ziel-URL“ (Webhook) ist leer → Testmodus: kein Versand, kein Conversion-Event. Für den Livegang die gleiche URL wie beim KlimaFunnel eintragen (FormSpark / Monday / Powerbird-Schnittstelle).
 
 ## Offen / mit Jemmy abstimmen
+
+- Förderzahlen (30 % / +16 % / +10–40 %, max. 80 % auf 28.000 €, Stichtag 2027) vor Launch gegen die KfW-Seite prüfen – Stand laut Briefing 21.07.2026
+- Planungstermin kostenlos oder anrechenbare Gebühr? Bis dahin steht auf den Termin-Stellen bewusst nur „unverbindlich“
+- kW-Faustformel: Briefing nennt Öl-Liter ÷ 250 bzw. Gas-kWh ÷ 2.500, Baujahr-Stufen 1979–2001 / 2002–2015 und Grenze 16 kW; umgesetzt ist die Variante aus dem Meeting (Preistabelle bis 18 kW). Welche gilt?
 
 - Seine Tabelle Jahresverbrauch → Wärmepumpentyp (hat er im Backend). Bis dahin gelten die Faustwerte oben; alle sind als Eigenschaften anpassbar.
 - Heizkörper-Zuschlag 10 % und W/m²-Werte bestätigen

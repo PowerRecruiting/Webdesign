@@ -38,6 +38,8 @@ export default function WaermepumpenFunnel(props) {
         hkZuschlag = 10,
         wwJePerson = 0.25,
         leadWert = 1500,
+        foerderMax = 22400,
+        startTermin = false,
         webhookUrl = "",
         telefon = "06732 600 7358",
         style,
@@ -51,6 +53,7 @@ export default function WaermepumpenFunnel(props) {
             { kw: 18, ohne: k18o, mit: k18m },
         ],
         demontageLo, demontageHi, mwst, vollbenutzung,
+        foerderMax,
         nutzungsgrad: nutzungsgrad / 100, hkZuschlag: hkZuschlag / 100, wwJePerson,
     }
 
@@ -62,7 +65,19 @@ export default function WaermepumpenFunnel(props) {
     const [sendFehler, setSendFehler] = useState(false)
     const [fertig, setFertig] = useState(false)
     const [phase, setPhase] = useState("fragen") // fragen | rechnet | ergebnis | kontakt
+    const [direkt, setDirekt] = useState(false) // Einstieg über „Direkt Planungstermin vereinbaren“
     const gestartet = useRef(false)
+
+    // Seite /waermepumpe-termin (Eigenschaft „Start mit Terminanfrage“) oder ?termin=1
+    // überspringt die Fragen und öffnet direkt die Terminanfrage
+    useEffect(() => {
+        if (typeof window === "undefined") return
+        if (startTermin || new URLSearchParams(window.location.search).get("termin") === "1") {
+            setDirekt(true)
+            setPhase("kontakt")
+            track("termin_direkt_start")
+        }
+    }, [])
 
     const aktiv = aktiveFragen(a)
     const total = aktiv.length
@@ -97,13 +112,14 @@ export default function WaermepumpenFunnel(props) {
     }
 
     function zurueck() {
+        if (phase === "kontakt" && direkt) { setDirekt(false); setPhase("fragen"); setIndex(0); return }
         if (phase === "kontakt") { setPhase("ergebnis"); return }
         if (phase === "ergebnis") { setPhase("fragen"); setIndex(total - 1); return }
         setIndex((i) => Math.max(0, i - 1))
     }
 
     function neuStarten() {
-        setA({}); setIndex(0); setPhase("fragen"); setFertig(false); setFehler({}); setSendFehler(false)
+        setA({}); setIndex(0); setPhase("fragen"); setDirekt(false); setFertig(false); setFehler({}); setSendFehler(false)
         gestartet.current = false
         setContact(LEER_KONTAKT)
     }
@@ -122,8 +138,9 @@ export default function WaermepumpenFunnel(props) {
         // Flache Feldnamen, damit die Anfrage in Mails und später im CRM lesbar ankommt
         const payload = {
             Anfrage: "Wärmepumpe",
+            Einstieg: direkt ? "Direkt Planungstermin (ohne Rechner)" : "Rechner",
             ...Object.fromEntries(aktiv.map((fr) => [fr.kurz, antwortText(fr, a[fr.id])])),
-            "Heizlast geschätzt": kalk.heizlast ? `${kw(kalk.heizlast)} (${kalk.methode})` : "–",
+            "Heizlast geschätzt": direkt ? "–" : kalk.heizlast ? `${kw(kalk.heizlast)} (${kalk.methode})` : "–",
             "Empfohlene Leistungsklasse": kalk.individuell ? "individuell" : `${kalk.klasse.kw} kW`,
             "Richtwert ohne Warmwasser (brutto)": kalk.individuell ? "–" : "ab " + euro(kalk.ohne.brutto),
             "Richtwert mit Warmwasser (brutto)": kalk.individuell ? "–" : "ab " + euro(kalk.mit.brutto),
@@ -180,7 +197,7 @@ export default function WaermepumpenFunnel(props) {
                         <Chev dir="left" /> Zurück
                     </button>
                     <span style={S.zaehler}>
-                        {phase === "fragen" ? `Schritt ${index + 1} von ${total}` : phase === "ergebnis" ? "Ihre Preisorientierung" : "Kontaktdaten"}
+                        {phase === "fragen" ? `Schritt ${index + 1} von ${total}` : phase === "ergebnis" ? "Ihre Preisorientierung" : direkt ? "Planungstermin" : "Kontaktdaten"}
                     </span>
                     <button className="edw-ghost" onClick={neuStarten} type="button">Neu starten</button>
                 </div>
@@ -195,7 +212,7 @@ export default function WaermepumpenFunnel(props) {
                 ) : phase === "ergebnis" ? (
                     <Ergebnis kalk={kalk} a={a} P={P} onWeiter={() => setPhase("kontakt")} />
                 ) : phase === "kontakt" ? (
-                    <Kontakt c={contact} fehler={fehler} sendet={sendet} sendFehler={sendFehler} telefon={telefon}
+                    <Kontakt c={contact} fehler={fehler} sendet={sendet} sendFehler={sendFehler} telefon={telefon} direkt={direkt}
                         onChange={(p) => setContact((c) => ({ ...c, ...p }))} onSubmit={absenden} kalk={kalk} />
                 ) : schritt.typ === "verbrauch" ? (
                     <Verbrauch key={schritt.id} f={schritt} a={a} wert={a[schritt.id]} onWahl={(w) => antworte(schritt.id, w)} />
@@ -510,7 +527,7 @@ function Ergebnis({ kalk, a, P, onWeiter }) {
             <div style={{ ...S.inner, maxWidth: 640 }}>
                 <h2 style={{ ...S.titel, textAlign: "left" }}>Ihre Anlage planen wir individuell</h2>
                 <p style={{ ...S.unter, textAlign: "left", margin: "12px 0 0" }}>
-                    {kalk.text} Wir rechnen Ihnen das sauber durch – kostenlos und unverbindlich.
+                    {kalk.text} Wir rechnen Ihnen das sauber durch – unverbindlich.
                 </p>
                 <button className="edw-prim" type="button" onClick={onWeiter} style={{ marginTop: 26 }}>
                     Individuelles Angebot anfordern <Chev dir="right" />
@@ -559,8 +576,10 @@ function Ergebnis({ kalk, a, P, onWeiter }) {
             {kalk.demontage && <p className="edw-mini" style={{ textAlign: "center", marginTop: 10 }}>Beide Preise enthalten bereits die Demontage der alten Heizung.</p>}
 
             <div className="edw-note">
-                <strong>Förderung:</strong> Den Förderantrag stellen wir für Sie. Sie geben anschließend nur noch Ihre
-                Daten ein und erhalten die Fördernummer. Die Preise oben verstehen sich <em>vor</em> Abzug der Förderung.
+                <strong>Förderung – wir kümmern uns um den Antrag.</strong> Für eine Wärmepumpe gibt es bis zu 80 % Zuschuss,
+                höchstens {euro(P.foerderMax)}. Die Preise oben verstehen sich <em>vor</em> Abzug der Förderung. Welche Boni
+                Ihnen zustehen, klären wir im Planungstermin – danach steht Ihr Förderbetrag in Euro im Festpreis-Angebot.
+                Den Antrag stellen wir vor Baubeginn für Sie, Sie geben nur noch Ihre Daten ein.
             </div>
 
             <span className="edw-lv-titel">Das haben wir für Sie eingerechnet</span>
@@ -584,25 +603,27 @@ function Ergebnis({ kalk, a, P, onWeiter }) {
 
             <p className="edw-disclaimer">
                 Diese Preisorientierung ist kein verbindliches Angebot. Mit Ihren Angaben steht der Preis erfahrungsgemäß
-                zu 80 bis 100 Prozent fest. Ihr verbindliches Festpreisangebot erhalten Sie nach der kostenlosen
-                Heizlast-Prüfung vor Ort.
+                zu 80 bis 100 Prozent fest. Den Festpreis nennen wir nach dem
+                Planungstermin vor Ort – ohne Nachträge.
             </p>
 
             <button className="edw-prim" type="button" onClick={onWeiter} style={{ marginTop: 22, maxWidth: 400 }}>
-                Kostenlosen Vor-Ort-Termin anfragen <Chev dir="right" />
+                Planungstermin vor Ort vereinbaren <Chev dir="right" />
             </button>
         </div>
     )
 }
 
-function Kontakt({ c, fehler, sendet, sendFehler, telefon, onChange, onSubmit, kalk }) {
+function Kontakt({ c, fehler, sendet, sendFehler, telefon, onChange, onSubmit, kalk, direkt = false }) {
     return (
         <div style={{ ...S.inner, maxWidth: 560 }}>
-            <h2 style={S.titel}>Wohin dürfen wir kommen?</h2>
+            <h2 style={S.titel}>{direkt ? "Planungstermin vor Ort vereinbaren" : "Wohin dürfen wir kommen?"}</h2>
             <p style={S.unter}>
-                {kalk.individuell
+                {direkt
+                    ? "Der Meister prüft bei Ihnen Heizlast, Heizkörper, Aufstellort und Stromanschluss. Danach erhalten Sie ein Festpreis-Angebot mit Ihrem Förderbetrag in Euro."
+                    : kalk.individuell
                     ? "Wir melden uns für die individuelle Planung bei Ihnen."
-                    : "Wir prüfen Ihre Angaben und melden uns für den kostenlosen Vor-Ort-Termin – ein Techniker, kein Verkäufer."}
+                    : "Wir prüfen Ihre Angaben und melden uns für den Planungstermin vor Ort – ein Meister, kein Verkäufer."}
             </p>
 
             <Feld l="Ihr Name" id="w-name" v={c.name} e={fehler.name} ac="name" ph="Vor- und Nachname" on={(v) => onChange({ name: v })} />
@@ -617,7 +638,7 @@ function Kontakt({ c, fehler, sendet, sendFehler, telefon, onChange, onSubmit, k
             <Feld l="Wann erreichen wir Sie am besten? (optional)" id="w-zeit" v={c.zeit} ph="z. B. werktags ab 16 Uhr" on={(v) => onChange({ zeit: v })} />
 
             <button className="edw-prim" type="button" onClick={onSubmit} disabled={sendet} style={{ marginTop: 22 }}>
-                {sendet ? "Wird gesendet …" : "Vor-Ort-Termin anfragen"}{!sendet && <Chev dir="right" />}
+                {sendet ? "Wird gesendet …" : "Planungstermin anfragen"}{!sendet && <Chev dir="right" />}
             </button>
 
             {sendFehler && (
@@ -627,7 +648,7 @@ function Kontakt({ c, fehler, sendet, sendFehler, telefon, onChange, onSubmit, k
                 </div>
             )}
             <ul className="edw-trust">
-                <li><Ic n="check" /> Kostenlos und unverbindlich</li>
+                <li><Ic n="check" /> Unverbindlich</li>
                 <li><Ic n="check" /> Förderantrag übernehmen wir</li>
                 <li><Ic n="check" /> Eigene Monteure aus Wörrstadt</li>
             </ul>
@@ -656,7 +677,7 @@ function Danke({ onNeu }) {
             <span className="edw-ok"><Ic n="check" /></span>
             <h2 style={{ ...S.titel, marginTop: 22 }}>Vielen Dank für Ihre Anfrage!</h2>
             <p style={S.unter}>
-                Wir haben Ihre Angaben erhalten und melden uns zeitnah, um den kostenlosen Vor-Ort-Termin abzustimmen.
+                Wir haben Ihre Angaben erhalten und melden uns zeitnah, um den Planungstermin vor Ort abzustimmen.
             </p>
             <p className="edw-tipp">
                 Sie beschleunigen die Planung, wenn Sie uns vorab ein Foto vom Heizungsraum, vom Typenschild der
@@ -860,6 +881,8 @@ addPropertyControls(WaermepumpenFunnel, {
     hkZuschlag: num("Zuschlag Heizkörper %", 10, 50),
     wwJePerson: num("WW kW je Person", 0.25, 2, 0.05),
     leadWert: num("Conversion-Wert €", 1500),
+    foerderMax: num("Förderung max. €", 22400),
+    startTermin: { type: ControlType.Boolean, title: "Start mit Terminanfrage", defaultValue: false },
     telefon: { type: ControlType.String, title: "Telefon", defaultValue: "06732 600 7358" },
     webhookUrl: { type: ControlType.String, title: "Ziel-URL", placeholder: "Leer = kein Versand", defaultValue: "" },
 })
