@@ -30,9 +30,9 @@ export default function Foerderung(props: FoerderungProps) {
         stichtag = "Ab 2027 sinkt die Grundförderung auf 15 %, der Klimabonus halbjährlich. Wer 2026 plant, sichert sich die höheren Sätze.",
         fussnote = "KfW-Heizungsförderung, Stand 21.07.2026. Höchstens 80 %, gerechnet auf max. 28.000 € förderfähige Kosten. Ob Sie die Boni erhalten, prüfen wir im Planungstermin.",
         ctaLabel = "Preis berechnen",
-        ctaLink = "/waermepumpe-angebot",
+        ctaLink = "/waermepumpe/preis",
         terminLabel = "Direkt Planungstermin vereinbaren",
-        terminLink = "/waermepumpe-termin",
+        terminLink = "/waermepumpe/termin",
         style,
     } = props
 
@@ -244,7 +244,7 @@ addPropertyControls(Foerderung, {
     stichtag: { type: ControlType.String, title: "Stichtag-Zeile", displayTextArea: true, defaultValue: "Ab 2027 sinkt die Grundförderung auf 15 %, der Klimabonus halbjährlich. Wer 2026 plant, sichert sich die höheren Sätze." },
     fussnote: { type: ControlType.String, title: "Fußnote", displayTextArea: true, defaultValue: "KfW-Heizungsförderung, Stand 21.07.2026. Höchstens 80 %, gerechnet auf max. 28.000 € förderfähige Kosten. Ob Sie die Boni erhalten, prüfen wir im Planungstermin." },
     ctaLabel: { type: ControlType.String, title: "CTA-Text", defaultValue: "Preis berechnen" },
-    ctaLink: { type: ControlType.Link, title: "CTA-Ziel", defaultValue: "/waermepumpe-angebot" },
+    ctaLink: { type: ControlType.Link, title: "CTA-Ziel", defaultValue: "/waermepumpe/preis" },
     terminLabel: { type: ControlType.String, title: "Termin-Text", defaultValue: "Direkt Planungstermin vereinbaren" },
-    terminLink: { type: ControlType.Link, title: "Termin-Ziel", defaultValue: "/waermepumpe-termin" },
+    terminLink: { type: ControlType.Link, title: "Termin-Ziel", defaultValue: "/waermepumpe/termin" },
 })

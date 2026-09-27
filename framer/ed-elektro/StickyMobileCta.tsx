@@ -14,7 +14,7 @@ import { trackCall, trackCta } from "https://framer.com/m/tracking-6HWM39.js@5o3
  * @framerIntrinsicHeight 76
  */
 export default function StickyMobileCta(props: StickyProps) {
-    const { label = "Preis berechnen", link = "/waermepumpe-angebot", phoneNumber = "+4967326007358", style } = props
+    const { label = "Preis berechnen", link = "/waermepumpe/preis", phoneNumber = "+4967326007358", style } = props
 
     const css = `
 .ed-sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; gap: 10px;
@@ -52,6 +52,6 @@ interface StickyProps {
 
 addPropertyControls(StickyMobileCta, {
     label: { type: ControlType.String, title: "Text", defaultValue: "Preis berechnen" },
-    link: { type: ControlType.Link, title: "Ziel", defaultValue: "/waermepumpe-angebot" },
+    link: { type: ControlType.Link, title: "Ziel", defaultValue: "/waermepumpe/preis" },
     phoneNumber: { type: ControlType.String, title: "Nummer für tel:", defaultValue: "+4967326007358" },
 })

@@ -68,7 +68,7 @@ export default function WaermepumpenFunnel(props) {
     const [direkt, setDirekt] = useState(false) // Einstieg über „Direkt Planungstermin vereinbaren“
     const gestartet = useRef(false)
 
-    // Seite /waermepumpe-termin (Eigenschaft „Start mit Terminanfrage“) oder ?termin=1
+    // Seite /waermepumpe/termin (Eigenschaft „Start mit Terminanfrage“) oder ?termin=1
     // überspringt die Fragen und öffnet direkt die Terminanfrage
     useEffect(() => {
         if (typeof window === "undefined") return

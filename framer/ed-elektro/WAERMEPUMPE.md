@@ -4,11 +4,11 @@ Umgesetzt im Framer-Projekt **ED-Elektro (Testseite)**, beide Seiten als Entwurf
 
 | Seite | Zweck |
 |---|---|
-| `/waermepumpe-rheinhessen` | Landingpage (Google-Ads-Ziel, SEO) – alle CTAs führen in den Funnel |
-| `/waermepumpe-angebot` | Funnel: Heizlast → Leistungsklasse → Preis → Planungstermin |
-| `/waermepumpe-termin` | Sekundär-CTA „Direkt Planungstermin vereinbaren“: gleicher Funnel, startet direkt mit der Terminanfrage |
+| `/waermepumpe` | Landingpage (Google-Ads-Ziel, SEO) – alle CTAs führen in den Funnel |
+| `/waermepumpe/preis` | Funnel: Heizlast → Leistungsklasse → Preis → Planungstermin |
+| `/waermepumpe/termin` | Sekundär-CTA „Direkt Planungstermin vereinbaren“: gleicher Funnel, startet direkt mit der Terminanfrage |
 
-Beide Seiten bauen auf den Klima-Seiten (`/klimaanlage-rheinhessen`, `/klimaanlage-angebot`) auf: gleicher Header, gleicher Footer, gleiche Code-Komponenten, gleiche Tonalität.
+Beide Seiten bauen auf den Klima-Seiten (`/klimaanlage`, `/klimaanlage/preis`) auf: gleicher Header, gleicher Footer, gleiche Code-Komponenten, gleiche Tonalität.
 
 ## Positionierung (aus den Meetings mit Jemmy, 09./16./23.09.2026)
 
@@ -25,7 +25,7 @@ Die Förderung wird als Full-Service kommuniziert – ED Elektro stellt den Antr
 1. Hero: „Wärmepumpe vom Elektro-Meister aus Wörrstadt“ · „Preis online sehen, Förderung erledigen wir, Planung persönlich vor Ort.“ · CTA „Preis berechnen“ + „Direkt Planungstermin vereinbaren“
 2. Vertrauensleiste (Meisterbetrieb, 12 Jahre, 3.000+ Aufträge, eigene Monteure)
 3. **Modul A – Förderung** (`Foerderung.tsx`): „Bis zu 22.400 € Zuschuss für Ihre neue Heizung“, drei Kacheln (30 % Grund · +16 % Klima · +10–40 % Einkommen), statische Beispielrechnung in Euro, Full-Service-Block „Wir kümmern uns um den Antrag“ (3 Schritte), Stichtag- und Wichtig-Zeile, Fußnote. Sätze als Eigenschaften pflegbar (Änderung 2027).
-4. Rechner-Einstieg „Was kostet eine Wärmepumpe in Rheinhessen?“ (CalculatorEntry → `/waermepumpe-angebot`)
+4. Rechner-Einstieg „Was kostet eine Wärmepumpe in Rheinhessen?“ (CalculatorEntry → `/waermepumpe/preis`)
 5. **Modul C – Planungstermin** (`Planungstermin.tsx`): „Online sehen Sie den Preis. Vor Ort planen wir Ihre Anlage.“ – vier Prüfpunkte (Heizlast, Heizkörper/Vorlauf, Aufstellort/Schall, Stromanschluss/Zählerschrank), Nutzen-Zeile, CTA + Telefon
 6. „Kennen Sie das?“ – Heizkosten, alte Heizung, Altbau, Förder-Dschungel, Vertriebsvermittler, keine Preistransparenz
 7. Ablauf in vier Schritten (online angeben → Heizlast & Preis → Telefonat → Vor-Ort-Termin, Angebot und Förderantrag)

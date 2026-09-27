@@ -18,7 +18,7 @@ export default function Planungstermin(props: PlanungsterminProps) {
         heading = "Online sehen Sie den Preis. Vor Ort planen wir Ihre Anlage.",
         nutzen = "Danach erhalten Sie ein Festpreis-Angebot mit Ihrem Förderbetrag in Euro – und wir stellen den Förderantrag für Sie.",
         ctaLabel = "Planungstermin vereinbaren",
-        ctaLink = "/waermepumpe-termin",
+        ctaLink = "/waermepumpe/termin",
         phoneDisplay = "06732 600 7358",
         phoneNumber = "+4967326007358",
         style,
@@ -131,7 +131,7 @@ addPropertyControls(Planungstermin, {
     heading: { type: ControlType.String, title: "H2", displayTextArea: true, defaultValue: "Online sehen Sie den Preis. Vor Ort planen wir Ihre Anlage." },
     nutzen: { type: ControlType.String, title: "Nutzen-Zeile", displayTextArea: true, defaultValue: "Danach erhalten Sie ein Festpreis-Angebot mit Ihrem Förderbetrag in Euro – und wir stellen den Förderantrag für Sie." },
     ctaLabel: { type: ControlType.String, title: "CTA-Text", defaultValue: "Planungstermin vereinbaren" },
-    ctaLink: { type: ControlType.Link, title: "CTA-Ziel", defaultValue: "/waermepumpe-termin" },
+    ctaLink: { type: ControlType.Link, title: "CTA-Ziel", defaultValue: "/waermepumpe/termin" },
     phoneDisplay: { type: ControlType.String, title: "Nummer sichtbar", defaultValue: "06732 600 7358" },
     phoneNumber: { type: ControlType.String, title: "Nummer für tel:", defaultValue: "+4967326007358" },
 })
