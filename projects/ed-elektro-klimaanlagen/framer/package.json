@@ -1,0 +1,13 @@
+{
+  "name": "ed-elektro-klimaanlagen-framer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node ../build.mjs",
+    "sync": "node ../build.mjs && node sync.mjs",
+    "publish-site": "node ../build.mjs && node sync.mjs --publish"
+  },
+  "dependencies": {
+    "framer-api": "^5.1.0"
+  }
+}

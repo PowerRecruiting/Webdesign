@@ -1,0 +1,167 @@
+<div class="edk" data-edk>
+<!-- Hallmark · pre-emit critique: P4 H5 E4 S5 R5 V4 · genre: modern-minimal · theme: custom (Rheinhessen-Kühle) -->
+
+<header class="edk-bar">
+  <a class="edk-mark" href="/">ED&nbsp;Elektro <span>und Klimasysteme</span></a>
+  <nav class="edk-bar-links" aria-label="Seitennavigation" data-edk-nav>
+    <a href="#leistungen">Leistungen</a>
+    <a href="#ablauf">Ablauf</a>
+    <a href="#kosten">Kosten</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a class="edk-bar-call" href="tel:{{TELEFON_LINK}}" data-edk-track="phone_click">{{TELEFON}}</a>
+</header>
+
+<main>
+  <nav class="edk-crumbs" aria-label="Brotkrumen">
+    <a href="/">Start</a><span aria-hidden="true">/</span><span aria-current="page">Klimaanlagen</span>
+  </nav>
+
+  <section class="edk-hero" aria-labelledby="edk-h1">
+    <div class="edk-hero-copy">
+      <p class="edk-kicker">Klimatechnik vom Elektro-Fachbetrieb · Mainz · Nieder-Olm · Alzey</p>
+      <h1 id="edk-h1" data-edk-headline>Klimaanlage für Ihr Zuhause: Beratung, Montage und Wartung aus einer Hand</h1>
+      <p class="edk-lede">Wir planen Split- und Multi-Split-Klimaanlagen passend zu Ihren Räumen, installieren Innen- und Außengerät sauber, schließen alles elektrisch selbst an und kümmern uns danach um die Wartung. Ein Ansprechpartner von der Besichtigung bis zur Inbetriebnahme.</p>
+      <ul class="edk-proof">
+        <li>Kühlen im Sommer, effizient heizen in der Übergangszeit</li>
+        <li>Elektroanschluss und Kältetechnik aus einem Betrieb</li>
+        <li>Kostenlose Vor-Ort-Besichtigung in Rheinhessen</li>
+      </ul>
+    </div>
+
+    <form class="edk-form" id="angebot" data-edk-form action="{{FORM_ENDPOINT}}" method="post" aria-labelledby="edk-form-title">
+      <h2 id="edk-form-title">Unverbindliches Angebot anfragen</h2>
+      <p class="edk-form-note">Drei kurze Fragen, dann melden wir uns mit einem Terminvorschlag für die Besichtigung.</p>
+
+      <fieldset class="edk-choice">
+        <legend>Wie viele Räume sollen klimatisiert werden?</legend>
+        <label><input type="radio" name="raeume" value="1 Raum" required> 1 Raum</label>
+        <label><input type="radio" name="raeume" value="2 Räume"> 2 Räume</label>
+        <label><input type="radio" name="raeume" value="3 oder mehr"> 3+</label>
+      </fieldset>
+
+      <fieldset class="edk-choice">
+        <legend>Um welches Gebäude geht es?</legend>
+        <label><input type="radio" name="gebaeude" value="Einfamilienhaus" required> Haus</label>
+        <label><input type="radio" name="gebaeude" value="Wohnung"> Wohnung</label>
+        <label><input type="radio" name="gebaeude" value="Büro / Gewerbe"> Gewerbe</label>
+      </fieldset>
+
+      <div class="edk-fields">
+        <label class="edk-field"><span>Name</span><input name="name" autocomplete="name" required></label>
+        <label class="edk-field"><span>Telefon</span><input name="telefon" type="tel" autocomplete="tel" inputmode="tel" required></label>
+        <label class="edk-field"><span>PLZ</span><input name="plz" autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" required></label>
+        <label class="edk-field"><span>E-Mail <em>(optional)</em></span><input name="email" type="email" autocomplete="email"></label>
+      </div>
+
+      <label class="edk-consent"><input type="checkbox" name="datenschutz" value="ja" required> <span>Ich bin einverstanden, dass meine Angaben zur Bearbeitung der Anfrage gespeichert werden. Details in der <a href="/datenschutz">Datenschutzerklärung</a>.</span></label>
+
+      <!-- SEA: Kampagnen-Parameter werden per Script befüllt -->
+      <input type="hidden" name="quelle" value="Landingpage Klimaanlagen">
+      <input type="hidden" name="gclid"><input type="hidden" name="gbraid"><input type="hidden" name="wbraid">
+      <input type="hidden" name="utm_source"><input type="hidden" name="utm_medium"><input type="hidden" name="utm_campaign"><input type="hidden" name="utm_term"><input type="hidden" name="utm_content">
+      <input type="text" name="firma_website" class="edk-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <button type="submit" class="edk-btn">Angebot anfragen</button>
+      <p class="edk-form-status" role="status" aria-live="polite" data-edk-status></p>
+      <p class="edk-form-alt">Lieber sprechen? <a href="tel:{{TELEFON_LINK}}" data-edk-track="phone_click">{{TELEFON}}</a></p>
+    </form>
+  </section>
+
+  <section class="edk-section" id="leistungen" aria-labelledby="edk-leistungen">
+    <div class="edk-head">
+      <p class="edk-num">01</p>
+      <h2 id="edk-leistungen">Welche Klimaanlage passt zu Ihnen?</h2>
+      <p>Für Wohngebäude empfehlen wir fest installierte Split-Geräte. Sie sind leiser und effizienter als mobile Monoblock-Geräte mit Abluftschlauch und können im Winter auch heizen.</p>
+    </div>
+    <table class="edk-spec">
+      <caption class="edk-sr">Übersicht der Klimaanlagen-Arten</caption>
+      <thead><tr><th scope="col">Anlage</th><th scope="col">Geeignet für</th><th scope="col">Gut zu wissen</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Single-Split-Klimaanlage</th><td>Ein Raum, z.&nbsp;B. Schlafzimmer, Home-Office oder Dachgeschoss</td><td>Ein Innengerät, ein Außengerät. Die schnellste und günstigste Lösung.</td></tr>
+        <tr><th scope="row">Multi-Split-Klimaanlage</th><td>Zwei bis fünf Räume</td><td>Ein Außengerät versorgt mehrere Innengeräte, jeder Raum wird einzeln geregelt.</td></tr>
+        <tr><th scope="row">Klimaanlage mit Heizfunktion</th><td>Übergangszeit, Anbauten, Wintergärten</td><td>Arbeitet als Luft-Luft-Wärmepumpe und heizt effizient mit Strom.</td></tr>
+        <tr><th scope="row">Klimatisierung für Gewerbe</th><td>Büros, Praxen, Ladenlokale, Serverräume</td><td>Planung nach Raumlast, Nutzungszeiten und Wärmequellen.</td></tr>
+        <tr><th scope="row">Wartung und Reparatur</th><td>Bestehende Anlagen</td><td>Reinigung, Dichtheitsprüfung und Funktionskontrolle. So bleibt die Anlage effizient und hygienisch.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="edk-section edk-band" id="ablauf" aria-labelledby="edk-ablauf">
+    <div class="edk-head">
+      <p class="edk-num">02</p>
+      <h2 id="edk-ablauf">So läuft Ihr Projekt ab</h2>
+    </div>
+    <ol class="edk-steps">
+      <li><h3>Anfrage</h3><p>Sie schildern uns kurz Räume und Wünsche, per Formular oder am Telefon.</p></li>
+      <li><h3>Besichtigung</h3><p>Wir sehen uns Räume, Außenwand und Stromanschluss vor Ort an und klären den Platz für das Außengerät.</p></li>
+      <li><h3>Festpreis-Angebot</h3><p>Sie erhalten ein schriftliches Angebot mit Gerät, Montage, Leitungen und Elektroanschluss.</p></li>
+      <li><h3>Montage</h3><p>Installation, Kältemittelleitungen, Dichtheitsprüfung und Inbetriebnahme. Danach erklären wir Ihnen die Bedienung.</p></li>
+    </ol>
+  </section>
+
+  <section class="edk-section" id="kosten" aria-labelledby="edk-kosten">
+    <div class="edk-head">
+      <p class="edk-num">03</p>
+      <h2 id="edk-kosten">Was kostet eine Klimaanlage mit Einbau?</h2>
+      <p>Seriös lässt sich der Preis erst nach der Besichtigung nennen. Diese Punkte bestimmen, was Ihre Anlage kostet:</p>
+    </div>
+    <dl class="edk-factors">
+      <div><dt>Anzahl der Räume</dt><dd>Single-Split für einen Raum oder Multi-Split für mehrere.</dd></div>
+      <div><dt>Leistung und Gerät</dt><dd>Richtet sich nach Raumgröße, Dämmung, Sonneneinstrahlung und Anspruch an die Lautstärke.</dd></div>
+      <div><dt>Leitungsweg</dt><dd>Länge und Verlauf der Kältemittelleitungen zwischen Innen- und Außengerät.</dd></div>
+      <div><dt>Montageort</dt><dd>Wandkonsole, Bodenaufstellung oder Flachdach; Kernbohrungen und Kondensatablauf.</dd></div>
+      <div><dt>Elektroanschluss</dt><dd>Eigener Stromkreis und Absicherung. Das übernehmen wir als Elektrobetrieb direkt mit.</dd></div>
+    </dl>
+    <a class="edk-link" href="#angebot">Kostenlose Besichtigung vereinbaren</a>
+  </section>
+
+  <section class="edk-section edk-area" aria-labelledby="edk-gebiet">
+    <div class="edk-head">
+      <p class="edk-num">04</p>
+      <h2 id="edk-gebiet">Klimaanlagen-Montage in Mainz, Nieder-Olm, Alzey und Umgebung</h2>
+      <p>Unser Betrieb sitzt in Rheinhessen. Kurze Wege bedeuten schnelle Termine für Besichtigung, Montage und Wartung.</p>
+    </div>
+    <ul class="edk-places">
+      <li>Mainz</li><li>Nieder-Olm</li><li>Alzey</li><li>Ingelheim</li><li>Wörrstadt</li><li>Bodenheim</li><li>Nierstein</li><li>Saulheim</li><li>Essenheim</li><li>Klein-Winternheim</li>
+    </ul>
+  </section>
+
+  <section class="edk-section" id="faq" aria-labelledby="edk-faq">
+    <div class="edk-head">
+      <p class="edk-num">05</p>
+      <h2 id="edk-faq">Häufige Fragen zur Klimaanlage</h2>
+    </div>
+    <div class="edk-faq">
+      <details><summary>Wer darf eine Klimaanlage installieren?</summary><p>Arbeiten am Kältemittelkreislauf dürfen nur zertifizierte Fachkräfte nach der EU-F-Gase-Verordnung ausführen. Eine selbst montierte Split-Anlage verliert häufig die Herstellergarantie. Wir übernehmen Montage, Befüllung, Dichtheitsprüfung und den Elektroanschluss.</p></details>
+      <details><summary>Wie lange dauert die Montage?</summary><p>Eine Single-Split-Anlage ist meist an einem Arbeitstag montiert und in Betrieb. Bei Multi-Split-Anlagen hängt die Dauer von der Zahl der Räume und dem Leitungsweg ab. Die genaue Dauer nennen wir Ihnen im Angebot.</p></details>
+      <details><summary>Kann ich mit der Klimaanlage auch heizen?</summary><p>Ja. Moderne Split-Klimaanlagen arbeiten als Luft-Luft-Wärmepumpe und heizen effizient, besonders in der Übergangszeit. Ob sie Ihre bestehende Heizung ergänzen kann, besprechen wir bei der Besichtigung.</p></details>
+      <details><summary>Wie laut ist das Außengerät?</summary><p>Das hängt vom Gerät und vom Aufstellort ab. Wir wählen einen Standort, der die Nachbarschaft berücksichtigt, und empfehlen bei Bedarf besonders leise Modelle. So halten Sie die geltenden Lärmrichtwerte ein.</p></details>
+      <details><summary>Brauche ich eine Genehmigung?</summary><p>Im Einfamilienhaus meist nicht. In Miet- oder Eigentumswohnungen brauchen Sie in der Regel die Zustimmung von Vermieter oder Eigentümergemeinschaft, weil das Außengerät die Fassade verändert. In Sonderfällen wie Denkmalschutz sind weitere Auflagen möglich.</p></details>
+      <details><summary>Wie oft muss eine Klimaanlage gewartet werden?</summary><p>Wir empfehlen eine jährliche Wartung mit Reinigung von Filtern und Wärmetauscher sowie einer Funktionsprüfung. Je nach Kältemittelmenge schreibt die F-Gase-Verordnung zusätzlich regelmäßige Dichtheitskontrollen vor.</p></details>
+      <details><summary>Gibt es eine Förderung für Klimaanlagen?</summary><p>Reine Luft-Luft-Klimaanlagen werden aktuell in der Regel nicht über die Bundesförderung für effiziente Gebäude (BEG) gefördert. Die Förderlage ändert sich aber. Wir prüfen im Beratungsgespräch, was für Ihr Vorhaben gilt.</p></details>
+    </div>
+  </section>
+
+  <section class="edk-close" aria-labelledby="edk-close">
+    <h2 id="edk-close">Bereit für einen kühlen Sommer?</h2>
+    <p>Fragen Sie jetzt an. Die Besichtigung ist kostenlos und unverbindlich.</p>
+    <div class="edk-close-actions">
+      <a class="edk-btn" href="#angebot">Angebot anfragen</a>
+      <a class="edk-btn edk-btn-ghost" href="tel:{{TELEFON_LINK}}" data-edk-track="phone_click">Anrufen: {{TELEFON}}</a>
+    </div>
+  </section>
+</main>
+
+<footer class="edk-foot">
+  <p><strong>{{FIRMA}}</strong> · {{STRASSE}} · {{PLZ}} {{ORT}} · <a href="mailto:{{EMAIL}}">{{EMAIL}}</a></p>
+  <p><a href="/impressum">Impressum</a> · <a href="/datenschutz">Datenschutz</a> · <a href="/kontakt">Kontakt</a></p>
+</footer>
+
+<div class="edk-callbar" aria-label="Schnellkontakt">
+  <a href="tel:{{TELEFON_LINK}}" data-edk-track="phone_click">Anrufen</a>
+  <a href="#angebot">Angebot anfragen</a>
+</div>
+
+<script type="application/ld+json">{{JSONLD}}</script>
+</div>

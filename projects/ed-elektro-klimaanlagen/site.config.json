@@ -1,0 +1,16 @@
+{
+  "_hinweis": "Alle Werte mit TODO vor dem Livegang ersetzen. Sie landen in der statischen Seite UND als Standardwerte der Framer-Komponente.",
+  "firma": "ED Elektro und Klimasysteme",
+  "domain": "https://ed-elektro.de",
+  "pfad": "/klimaanlagen",
+  "telefon": "TODO 06136 000000",
+  "telefonLink": "+496136000000",
+  "email": "TODO info@ed-elektro.de",
+  "strasse": "TODO Straße Hausnummer",
+  "plz": "TODO 55268",
+  "ort": "Nieder-Olm",
+  "formEndpoint": "",
+  "ogImage": "https://ed-elektro.de/og-klimaanlagen.jpg",
+  "framerProjectUrl": "https://framer.com/projects/ED-Elektro--GRncpWfUFfXslEuDw7mt-eBaGN",
+  "framerTemplateNodeId": "XG1HgOBTY"
+}
