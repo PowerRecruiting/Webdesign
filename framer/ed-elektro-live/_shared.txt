@@ -1,0 +1,4 @@
+Gemeinsame Konventionen der Wärmepumpen-Module (Projekt ED-Elektro):
+- Tokens:   https://framer.com/m/tokens-x6g0t9.js@tWKhZJ2SyC5SsFax1CzI
+- Tracking: https://framer.com/m/tracking-JmBWDZ.js@lcHsNL6PUwr6EaepsGIe
+- Jeder Abschnitt endet mit dem Button „Preis und Förderung prüfen“ → /waermepumpe/preis
