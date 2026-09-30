@@ -1,0 +1,99 @@
+<!-- ED Elektro · Cookie-Banner + Google Consent Mode v2
+     Framer › Site Settings › Custom Code › Start of <head> (alle Seiten).
+     Muss VOR dem GTM-Snippet (GTM-5ZV5KQLS, Ende von <head>) stehen. -->
+<script>
+(function (w) {
+  var KEY = "ed_consent_v1";
+  w.dataLayer = w.dataLayer || [];
+  w.gtag = w.gtag || function () { w.dataLayer.push(arguments); };
+  // Standard: alles abgelehnt, bis der Besucher entscheidet
+  gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    functionality_storage: "granted",
+    security_storage: "granted",
+    wait_for_update: 500
+  });
+  gtag("set", "ads_data_redaction", true);
+  gtag("set", "url_passthrough", true);
+
+  function read() {
+    try { var c = JSON.parse(localStorage.getItem(KEY) || "null"); return c && typeof c.s === "boolean" ? c : null; } catch (e) { return null; }
+  }
+  function apply(c, neu) {
+    var st = c.s ? "granted" : "denied", mk = c.m ? "granted" : "denied";
+    gtag("consent", "update", { analytics_storage: st, ad_storage: mk, ad_user_data: mk, ad_personalization: mk });
+    w.dataLayer.push({ event: neu ? "cookie_consent_update" : "cookie_consent_restore", consent_statistik: c.s, consent_marketing: c.m });
+  }
+  var saved = read();
+  if (saved) apply(saved, false);
+
+  function ui() {
+    if (document.getElementById("edcc")) return;
+    var css = "#edcc{position:fixed;inset:auto 0 0 0;z-index:2147483000;display:flex;justify-content:center;padding:12px;pointer-events:none;font-family:Figtree,system-ui,-apple-system,sans-serif}" +
+      "#edcc[hidden]{display:none}" +
+      "#edcc .b{pointer-events:auto;width:100%;max-width:760px;max-height:calc(100vh - 24px);overflow:auto;background:#fff;color:#444;border:1px solid #DFE4EA;border-radius:14px;box-shadow:0 12px 40px rgba(15,23,42,.22);padding:20px}" +
+      "#edcc h2{margin:0 0 6px;font-size:18px;line-height:1.3;font-weight:700;color:#0F172A}" +
+      "#edcc p{margin:0;font-size:15px;line-height:1.55}" +
+      "#edcc a{color:#1D5BCF;text-decoration:underline}" +
+      "#edcc .o{display:none;margin:14px 0 0;padding:0;list-style:none;border-top:1px solid #DFE4EA}" +
+      "#edcc.x .o{display:block}" +
+      "#edcc .o li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #DFE4EA}" +
+      "#edcc .o input{flex:0 0 auto;width:20px;height:20px;margin:2px 0 0;accent-color:#1D5BCF}" +
+      "#edcc .o strong{display:block;color:#0F172A;font-size:15px}" +
+      "#edcc .o span{display:block;font-size:14px;line-height:1.45}" +
+      "#edcc .a{display:flex;flex-direction:column;gap:8px;margin-top:16px}" +
+      "#edcc button{appearance:none;cursor:pointer;font:inherit;font-size:16px;font-weight:600;line-height:1.2;padding:13px 18px;border-radius:10px;border:1.5px solid #1D5BCF;background:#fff;color:#1D5BCF}" +
+      "#edcc button.p{background:#1D5BCF;color:#fff}" +
+      "#edcc button.l{border-color:transparent;background:none;color:#444;text-decoration:underline;padding:8px}" +
+      "#edcc .sv{display:none}#edcc.x .sv{display:block}#edcc.x .st{display:none}" +
+      "#edcc button:focus-visible{outline:3px solid #0F172A;outline-offset:2px}" +
+      "@media (min-width:640px){#edcc{padding:20px}#edcc .b{padding:24px 28px}#edcc .a{flex-direction:row;flex-wrap:wrap;align-items:center}#edcc .a button{flex:1 1 0}#edcc .a button.l{flex:0 0 auto;order:-1;margin-right:auto}}";
+    var s = document.createElement("style"); s.textContent = css; document.head.appendChild(s);
+    var d = document.createElement("div");
+    d.id = "edcc"; d.setAttribute("role", "dialog"); d.setAttribute("aria-modal", "false"); d.setAttribute("aria-labelledby", "edcc-h"); d.lang = "de";
+    d.innerHTML = '<div class="b"><h2 id="edcc-h">Cookies &amp; Datenschutz</h2>' +
+      '<p>Wir nutzen notwendige Cookies, damit die Website funktioniert. Mit Ihrer Zustimmung setzen wir zusätzlich Google-Dienste (Google Tag Manager, Google Analytics, Google Ads) ein, um die Website zu verbessern und unsere Werbung zu messen. Ihre Auswahl können Sie jederzeit ändern. Mehr in der <a href="/datenschutz">Datenschutzerklärung</a> · <a href="/impressum">Impressum</a>.</p>' +
+      '<ul class="o">' +
+      '<li><input type="checkbox" checked disabled id="edcc-n"><label for="edcc-n"><strong>Notwendig</strong><span>Grundfunktionen der Website und das Speichern Ihrer Cookie-Auswahl. Immer aktiv.</span></label></li>' +
+      '<li><input type="checkbox" id="edcc-s"><label for="edcc-s"><strong>Statistik</strong><span>Google Analytics: anonyme Auswertung, wie die Website genutzt wird.</span></label></li>' +
+      '<li><input type="checkbox" id="edcc-m"><label for="edcc-m"><strong>Marketing</strong><span>Google Ads: Messung, welche Anzeigen zu Anfragen führen, und passende Werbung.</span></label></li>' +
+      '</ul><div class="a">' +
+      '<button type="button" class="l st" data-a="more">Einstellungen</button>' +
+      '<button type="button" data-a="deny">Nur notwendige</button>' +
+      '<button type="button" class="sv" data-a="save">Auswahl speichern</button>' +
+      '<button type="button" class="p" data-a="all">Alle akzeptieren</button>' +
+      '</div></div>';
+    document.body.appendChild(d);
+    var cs = d.querySelector("#edcc-s"), cm = d.querySelector("#edcc-m");
+    function choose(c) {
+      c.t = new Date().toISOString();
+      try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {}
+      apply(c, true);
+      d.hidden = true; d.className = "";
+    }
+    d.addEventListener("click", function (e) {
+      var b = e.target.closest && e.target.closest("button[data-a]"); if (!b) return;
+      var a = b.getAttribute("data-a");
+      if (a === "all") choose({ s: true, m: true });
+      else if (a === "deny") choose({ s: false, m: false });
+      else if (a === "save") choose({ s: cs.checked, m: cm.checked });
+      else if (a === "more") { d.className = "x"; cs.focus(); }
+    });
+    w.edCookieSettings = function () {
+      var c = read() || { s: false, m: false };
+      cs.checked = c.s; cm.checked = c.m; d.className = "x"; d.hidden = false;
+    };
+    if (read()) d.hidden = true;
+  }
+  // Wieder öffnen: Footer-Link „Cookie-Einstellungen“ (/datenschutz#cookie-einstellungen)
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[href$="#cookie-einstellungen"]');
+    if (!a) return; e.preventDefault(); e.stopPropagation(); ui(); w.edCookieSettings();
+  }, true);
+  function start() { ui(); if (location.hash === "#cookie-einstellungen") w.edCookieSettings(); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+})(window);
+</script>

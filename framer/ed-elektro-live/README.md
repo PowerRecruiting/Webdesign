@@ -24,6 +24,16 @@ Framer-Projekt „ED-Elektro“ (GRncpWfUFfXslEuDw7mt). Beide Seiten als **Entwu
 
 Jedes neue Modul endet mit „Preis und Förderung prüfen“ → `/waermepumpe/preis` (Google-Ads-Parameter werden mitgenommen).
 
+## Cookie-Banner & Google Consent Mode v2
+
+`cookie-consent.html` liegt in Framer unter Site Settings › Custom Code › **Start of `<head>`** und gilt damit für alle Seiten. Es läuft vor dem bestehenden GTM-Snippet (`GTM-5ZV5KQLS`, Ende von `<head>`).
+
+- Standard: `analytics_storage`, `ad_storage`, `ad_user_data` und `ad_personalization` stehen auf `denied`. Dazu kommen `ads_data_redaction` und `url_passthrough`, damit die gclid ohne Cookies erhalten bleibt.
+- Der Banner hat drei Buttons: „Alle akzeptieren“, „Nur notwendige“ und „Einstellungen“ mit den Kategorien Statistik (GA4) und Marketing (Google Ads). Die Auswahl liegt in `localStorage` unter `ed_consent_v1`. Beim nächsten Besuch wird sie vor dem Laden von GTM wieder gesetzt.
+- dataLayer-Events: `cookie_consent_update` bei einer neuen Wahl und `cookie_consent_restore` beim Wiederbesuch, jeweils mit `consent_statistik` und `consent_marketing`.
+- Wieder öffnen: Footer-Link „Cookie-Einstellungen“ (`/datenschutz#cookie-einstellungen`, Scroll-Target am Embed der Datenschutzseite) oder `window.edCookieSettings()`.
+- **In GTM prüfen:** GA4- und Google-Ads-Tags respektieren Consent Mode automatisch. Tags anderer Anbieter (z. B. Meta Pixel oder Hotjar) brauchen unter „Einwilligungseinstellungen“ die zusätzliche Einwilligung `ad_storage` oder `analytics_storage`, oder sie werden über das Event `cookie_consent_update` ausgelöst.
+
 ## Vor dem Livegang prüfen
 
 - Vergleichswerte (Heizkosten, CO₂) und Förderangaben (Stand 21.07.2026) freigeben
