@@ -216,7 +216,7 @@ export default function WaermepumpenFunnel(props) {
             )}
             {zeigeKopf && <div style={S.track}><div style={{ ...S.fill, width: fortschritt + "%" }} /></div>}
 
-            <div style={S.buehne}>
+            <div className="edw-buehne" style={S.buehne}>
                 {fertig ? (
                     <Danke onNeu={neuStarten} />
                 ) : phase === "rechnet" ? (
@@ -789,13 +789,13 @@ const CSS = `
 .edw-card-on { border-color:var(--edw-accent); box-shadow:0 0 0 2px rgba(29,91,207,.18); }
 .edw-ic { color:var(--edw-accent); display:flex; }
 .edw-lab { font-size:16px; font-weight:600; color:#0F172A; line-height:1.35; }
-.edw-hint { font-size:13px; color:#64748B; line-height:1.45; }
-.edw-mini { margin-top:8px; font-size:13px; color:#64748B; line-height:1.5; }
+.edw-hint { font-size:13.5px; color:#64748B; line-height:1.4; }
+.edw-mini { margin-top:8px; font-size:14px; color:#64748B; line-height:1.5; }
 
 .edw-heizlast { margin:26px auto 0; display:flex; align-items:center; justify-content:center; gap:28px; padding:18px 26px;
   background:#fff; border:1px solid #E3E8F0; border-radius:14px; color:#94A3B8; }
 .edw-heizlast > div { display:flex; flex-direction:column; align-items:center; gap:2px; text-align:center; }
-.edw-hl-lab { font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B; }
+.edw-hl-lab { font-size:12.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B; }
 .edw-hl-zahl { font-size:26px; font-weight:800; color:#0F172A; font-variant-numeric:tabular-nums; }
 .edw-hl-sub { font-size:13px; color:#64748B; }
 
@@ -803,14 +803,14 @@ const CSS = `
   background:#fff; border:1px solid #E3E8F0; border-radius:16px; text-align:center; }
 .edw-preis-on { border-color:var(--edw-accent); box-shadow:0 0 0 2px rgba(29,91,207,.18), 0 16px 32px -18px rgba(29,91,207,.45); }
 .edw-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); white-space:nowrap; padding:4px 12px;
-  border-radius:999px; background:var(--edw-accent); color:#fff; font-size:12px; font-weight:700; }
+  border-radius:999px; background:var(--edw-accent); color:#fff; font-size:13px; font-weight:700; }
 .edw-preis-lab { font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B; }
 .edw-preis-zahl { font-size:clamp(28px,3.6vw,40px); font-weight:800; color:var(--edw-accent); font-variant-numeric:tabular-nums; line-height:1.15; white-space:nowrap; }
 .edw-preis-sub { font-size:14px; color:#475569; font-variant-numeric:tabular-nums; }
 .edw-preis-note { margin-top:4px; font-size:14px; line-height:1.5; color:#475569; max-width:320px; }
 
 .edw-lv-titel { margin:30px auto 0; font-size:17px; font-weight:700; color:#0F172A; text-align:center; }
-.edw-why { display:block; margin-top:2px; font-size:12.5px; font-style:normal; color:#94A3B8; }
+.edw-why { display:block; margin-top:2px; font-size:13px; font-style:normal; color:#7C8BA1; }
 .edw-note { margin:20px auto 0; max-width:900px; width:100%; padding:14px 18px; border-radius:10px; font-size:14px;
   line-height:1.55; background:#EAF0FC; color:#1E3A8A; border:1px solid #C7D8F7; }
 .edw-note-warn { background:#FEF3C7; color:#78350F; border-color:#FCD34D; }
@@ -825,7 +825,7 @@ const CSS = `
 .edw-li-off { color:#64748B; }
 .edw-li-off svg { color:#94A3B8; }
 
-.edw-disclaimer { margin:22px auto 0; max-width:700px; font-size:13px; line-height:1.65; color:#64748B; text-align:center; }
+.edw-disclaimer { margin:22px auto 0; max-width:700px; font-size:14px; line-height:1.65; color:#64748B; text-align:center; }
 
 .edw-label { font-size:14px; font-weight:600; color:#0F172A; margin-bottom:8px; }
 .edw-input { width:100%; height:52px; padding:0 16px; font-size:16px; color:#0F172A; background:#fff;
@@ -833,10 +833,10 @@ const CSS = `
 .edw-input::placeholder { color:#94A3B8; }
 .edw-input:focus { border-color:var(--edw-accent); box-shadow:0 0 0 3px rgba(29,91,207,.14); }
 .edw-input-err { border-color:#DC2626; }
-.edw-err { margin-top:6px; font-size:13px; color:#DC2626; }
+.edw-err { margin-top:6px; font-size:14px; color:#DC2626; }
 .edw-row { display:flex; gap:12px; align-items:flex-start; }
 
-.edw-prim { display:inline-flex; align-items:center; justify-content:center; gap:8px; height:54px; padding:0 26px;
+.edw-prim { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:54px; padding:12px 22px; line-height:1.25; text-align:center;
   cursor:pointer; width:100%; background:var(--edw-accent); color:#fff; border:0; border-radius:10px; font-size:16px;
   font-weight:600; align-self:center; transition:filter .15s, transform .15s; }
 .edw-prim:hover:not(:disabled) { filter:brightness(1.08); }
@@ -856,7 +856,7 @@ const CSS = `
 .edw-trust { list-style:none; padding:0; margin:18px 0 0; display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:center; }
 .edw-trust li { display:inline-flex; align-items:center; gap:6px; font-size:14px; color:#475569; }
 .edw-trust svg { width:16px; height:16px; color:var(--edw-accent); }
-.edw-legal { margin:18px 0 0; font-size:12px; line-height:1.6; color:#94A3B8; text-align:center; }
+.edw-legal { margin:18px 0 0; font-size:13px; line-height:1.6; color:#7C8BA1; text-align:center; }
 .edw-tipp { margin:16px auto 0; max-width:480px; font-size:14px; line-height:1.6; color:#475569;
   background:#fff; border:1px solid #E3E8F0; border-radius:12px; padding:16px 18px; }
 
@@ -873,15 +873,24 @@ const CSS = `
   .edw-preise { gap:26px; }
 }
 @media (max-width: 640px) {
-  .edw-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; max-width:100% !important; gap:12px; }
-  .edw-card { min-height:146px; padding:18px 12px; }
-  .edw-hint { display:none; }
-  .edw-row { flex-direction:column; gap:0; }
-  .edw-row > div { flex:1 1 auto !important; }
-  .edw-preis-zahl { font-size:28px; }
-  .edw-heizlast { gap:14px; padding:16px; }
+  .edw { border-radius:0 !important; padding:20px 16px 36px !important; }
+  .edw-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; max-width:100% !important; gap:10px; margin-top:24px !important; }
+  .edw-card { min-height:128px; padding:16px 10px; gap:8px; }
+  .edw-lab { font-size:15px; }
+  .edw-hint { font-size:12.5px; }
+  .edw-row { gap:10px; }
+  .edw-row > div:first-child { flex:0 0 108px !important; }
+  .edw-preis-zahl { font-size:30px; }
+  .edw-preis { padding:26px 16px 20px; }
+  .edw-heizlast { gap:12px; padding:14px 12px; width:100%; }
   .edw-hl-zahl { font-size:22px; }
-  .edw-ghost { font-size:13px; padding:6px 4px; }
+  .edw-box { padding:18px 16px; }
+  .edw-li { font-size:14.5px; }
+  .edw-note { font-size:14.5px; padding:14px 14px; }
+  .edw-ghost { font-size:14px; padding:8px 4px; }
+  .edw-tg { padding:9px 12px; font-size:13.5px; }
+  .edw-trust { flex-direction:column; align-items:center; gap:6px; }
+  .edw-buehne { padding-top:28px !important; }
 }
 `
 

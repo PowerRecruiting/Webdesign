@@ -52,20 +52,20 @@ export default function WpHero(props: WpHeroProps) {
 .${scope} *, .${scope} *::before, .${scope} *::after { box-sizing: border-box; }
 .${scope}__inner { width: 100%; max-width: ${tokens.maxWidth}px; margin: 0 auto; padding: ${tokens.space[7]}px ${tokens.space[4]}px ${tokens.space[8]}px;
   display: grid; grid-template-columns: minmax(0,1fr); gap: ${tokens.space[7]}px; align-items: center; }
-.${scope}__badge { display: inline-flex; padding: 6px 12px; border-radius: 999px; background: ${tokens.color.primary}; color: #fff; font-size: .8125rem; font-weight: 700; letter-spacing: .02em; }
-.${scope}__h1 { margin: ${tokens.space[4]}px 0 0; font-family: ${fontFamily.heading}; font-size: ${tokens.font.h1}; font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; color: ${tokens.color.text}; }
+.${scope}__badge { display: inline-flex; padding: 6px 12px; border-radius: 999px; background: ${tokens.color.primary}; color: #fff; font-size: .875rem; line-height: 1.3; font-weight: 700; letter-spacing: .02em; }
+.${scope}__h1 { margin: ${tokens.space[4]}px 0 0; font-family: ${fontFamily.heading}; font-size: clamp(1.875rem, 7.6vw, 2.25rem); font-weight: 700; line-height: 1.12; overflow-wrap: break-word; letter-spacing: -0.02em; color: ${tokens.color.text}; }
 .${scope}__sub { margin: ${tokens.space[4]}px 0 0; max-width: 54ch; font-size: ${tokens.font.body}; line-height: 1.55; }
 .${scope}__frage { margin-top: ${tokens.space[6]}px; padding: ${tokens.space[5]}px; border-radius: ${tokens.radius.md}px; background: #fff; border: 1px solid ${tokens.color.line}; box-shadow: 0 18px 40px -24px rgba(15,23,42,.35); }
-.${scope}__fl { margin: 0 0 ${tokens.space[3]}px; font-size: .9375rem; font-weight: 600; color: ${tokens.color.text}; }
+.${scope}__fl { margin: 0 0 ${tokens.space[3]}px; font-size: 1rem; font-weight: 600; color: ${tokens.color.text}; }
 .${scope}__btns { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: ${tokens.space[3]}px; }
-.${scope}__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 104px; padding: 14px;
+.${scope}__btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-height: 96px; padding: 12px 10px; line-height: 1.25;
   border-radius: ${tokens.radius.sm + 2}px; border: 2px solid ${tokens.color.line}; background: ${tokens.color.surfaceAlt}; color: ${tokens.color.text};
   font-family: ${fontFamily.heading}; font-size: 1.0625rem; font-weight: 700; text-decoration: none; text-align: center; transition: border-color .15s, transform .15s, background .15s; }
 .${scope}__btn:hover { border-color: ${tokens.color.primary}; background: #fff; transform: translateY(-2px); }
 .${scope}__btn svg { color: ${tokens.color.primary}; }
 .${scope}__list { display: grid; grid-template-columns: minmax(0,1fr); gap: 8px 20px; margin: ${tokens.space[5]}px 0 0; padding: 0; list-style: none; }
-.${scope}__list li { display: flex; gap: 8px; align-items: center; font-size: .9375rem; font-weight: 500; color: ${tokens.color.text}; }
-.${scope}__list svg { flex: 0 0 auto; color: ${tokens.color.success}; }
+.${scope}__list li { display: flex; gap: 8px; align-items: flex-start; font-size: 1rem; line-height: 1.4; font-weight: 500; color: ${tokens.color.text}; }
+.${scope}__list svg { flex: 0 0 auto; margin-top: 2px; color: ${tokens.color.success}; }
 .${scope}__tel { display: inline-flex; margin-top: ${tokens.space[4]}px; font-size: .9375rem; color: ${tokens.color.textMuted}; }
 .${scope}__tel a { margin-left: 6px; color: ${tokens.color.primary}; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; }
 .${scope}__media { position: relative; }
@@ -79,6 +79,7 @@ export default function WpHero(props: WpHeroProps) {
 .${scope}__f3 { bottom: 16px; left: 16px; }
 @media (min-width: ${breakpoints.tablet}px) {
   .${scope}__inner { padding: ${tokens.space[8]}px ${tokens.space[6]}px ${tokens.space[9]}px; }
+  .${scope}__h1 { font-size: ${tokens.font.h1}; line-height: 1.08; }
   .${scope}__list { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
 @media (min-width: ${breakpoints.desktop}px) {
@@ -90,7 +91,7 @@ export default function WpHero(props: WpHeroProps) {
 `
 
     return (
-        <section aria-labelledby={headingId} className={scope} style={style}>
+        <section lang="de" aria-labelledby={headingId} className={scope} style={style}>
             <style dangerouslySetInnerHTML={styleHtml(css)} />
             <div className={`${scope}__inner`}>
                 <div>
