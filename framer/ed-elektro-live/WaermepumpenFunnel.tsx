@@ -1,5 +1,13 @@
 import { useState, useEffect, useRef } from "react"
+import * as FramerLib from "framer"
 import { addPropertyControls, ControlType } from "framer"
+
+// Framers eigener Formular-Container (derselbe wie beim Kontaktformular). Er steht nicht in den
+// öffentlichen Typen, deshalb defensiv: fehlt er, zeigt der Funnel den Fehlerhinweis statt eines Danke.
+const FormContainer: any = (FramerLib as any).FormContainer
+
+/** Framer-Formular von /kontakt – Anfragen landen am selben Ziel (Framer › Formular › „Send To“). */
+const FORM_KONTAKT = "https://api.framer.com/forms/v1/forms/e58beef6-2917-4245-8c1d-f10c3a49a28e/submit"
 
 /**
  * ED Elektro & Klimatechnik – Wärmepumpen-Funnel mit Heizlast-Schätzung
@@ -40,6 +48,7 @@ export default function WaermepumpenFunnel(props) {
         leadWert = 1500,
         foerderMax = 22400,
         startTermin = false,
+        formAction = FORM_KONTAKT,
         webhookUrl = "",
         telefon = "06732 600 7358",
         style,
@@ -67,6 +76,10 @@ export default function WaermepumpenFunnel(props) {
     const [phase, setPhase] = useState("fragen") // fragen | rechnet | ergebnis | kontakt
     const [direkt, setDirekt] = useState(false) // Einstieg über „Direkt Planungstermin vereinbaren“
     const gestartet = useRef(false)
+    // Versand über das Framer-Formular (gleiches Ziel wie /kontakt)
+    const formRef = useRef<HTMLFormElement>(null)
+    const [formDaten, setFormDaten] = useState<Record<string, string> | null>(null)
+    const sendeTimer = useRef<any>(null)
 
     // Seite /waermepumpe/termin (Eigenschaft „Start mit Terminanfrage“) oder ?termin=1
     // überspringt die Fragen und öffnet direkt die Terminanfrage
@@ -168,7 +181,7 @@ export default function WaermepumpenFunnel(props) {
             Zeitpunkt: new Date().toISOString(),
         }
 
-        if (!webhookUrl) {
+        if (!formAction && !webhookUrl) {
             // Testmodus: kein Versand und bewusst kein Conversion-Event
             console.log("Wärmepumpen-Funnel-Anfrage (kein Ziel hinterlegt):", payload)
             setFertig(true)
@@ -177,22 +190,47 @@ export default function WaermepumpenFunnel(props) {
 
         setSendet(true)
         setSendFehler(false)
-        try {
-            const res = await fetch(webhookUrl, {
+
+        if (webhookUrl) {
+            // Optional zusätzlich an einen Webhook (z. B. CRM); blockiert den Versand nicht
+            fetch(webhookUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Accept: "application/json" },
                 body: JSON.stringify(payload),
-            })
-            if (!res.ok) throw new Error("HTTP " + res.status)
-            track("lead_submit", { value: leadWert, currency: "EUR", calc_klasse_kw: kalk.klasse?.kw })
-            setFertig(true)
-        } catch (e) {
-            // Kein Danke-Screen bei Fehler – sonst gehen Anfragen unbemerkt verloren
-            console.error("Wärmepumpen-Funnel: Versand fehlgeschlagen", e)
-            setSendFehler(true)
-        } finally {
-            setSendet(false)
+            }).catch((e) => console.error("Wärmepumpen-Funnel: Webhook fehlgeschlagen", e))
+            if (!formAction) { versandOk(); return }
         }
+
+        if (!FormContainer) { versandFehler(new Error("FormContainer nicht verfügbar")); return }
+
+        // Hidden-Felder rendern, danach sendet der Effekt unten das Framer-Formular ab
+        setFormDaten(Object.fromEntries(Object.entries(payload).map(([k, v]) => [k, String(v ?? "")])))
+        clearTimeout(sendeTimer.current)
+        // Framer ruft weder onSuccess noch onError, wenn das Formular nicht senden kann (z. B. in der Vorschau)
+        sendeTimer.current = setTimeout(() => versandFehler(new Error("Zeitüberschreitung")), 30000)
+    }
+
+    useEffect(() => {
+        if (formDaten && formRef.current) formRef.current.requestSubmit()
+    }, [formDaten])
+
+    useEffect(() => () => clearTimeout(sendeTimer.current), [])
+
+    function versandOk() {
+        clearTimeout(sendeTimer.current)
+        track("lead_submit", { value: leadWert, currency: "EUR", calc_klasse_kw: kalk.klasse?.kw })
+        setSendet(false)
+        setFormDaten(null)
+        setFertig(true)
+    }
+
+    function versandFehler(e) {
+        // Kein Danke-Screen bei Fehler – sonst gehen Anfragen unbemerkt verloren
+        clearTimeout(sendeTimer.current)
+        console.error("Wärmepumpen-Funnel: Versand fehlgeschlagen", e)
+        setSendet(false)
+        setFormDaten(null)
+        setSendFehler(true)
     }
 
     const schritt = aktiv[Math.min(index, total - 1)]
@@ -232,6 +270,16 @@ export default function WaermepumpenFunnel(props) {
                 ) : (
                     <Frage key={schritt.id} f={schritt} gewaehlt={a[schritt.id]} onWahl={(o) => antworte(schritt.id, o)} />
                 )}
+            {formAction && FormContainer && (
+                <FormContainer ref={formRef} action={formAction} onSuccess={versandOk} onError={() => versandFehler(new Error("Framer-Formular"))}
+                    style={{ display: "none" }} aria-hidden="true">
+                    {() => (
+                        <>
+                            {formDaten && Object.entries(formDaten).map(([k, v]) => <input key={k} type="hidden" name={k} value={v} readOnly />)}
+                        </>
+                    )}
+                </FormContainer>
+            )}
             </div>
         </div>
         </div>
@@ -920,5 +968,7 @@ addPropertyControls(WaermepumpenFunnel, {
     foerderMax: num("Förderung max. €", 22400),
     startTermin: { type: ControlType.Boolean, title: "Start mit Terminanfrage", defaultValue: false },
     telefon: { type: ControlType.String, title: "Telefon", defaultValue: "06732 600 7358" },
-    webhookUrl: { type: ControlType.String, title: "Ziel-URL", placeholder: "Leer = kein Versand", defaultValue: "" },
+    formAction: { type: ControlType.String, title: "Framer-Formular", placeholder: "Leer = kein Framer-Formular", defaultValue: FORM_KONTAKT,
+        description: "Submit-URL eines Framer-Formulars. Standard: Kontaktformular." },
+    webhookUrl: { type: ControlType.String, title: "Webhook (optional)", placeholder: "Zusätzlich an CRM o. ä.", defaultValue: "" },
 })

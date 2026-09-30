@@ -40,5 +40,5 @@ Jedes neue Modul endet mit „Preis und Förderung prüfen“ → `/waermepumpe/
 - Qualifikationen: Bezeichnungen der Konzessionen/Abschlüsse bestätigen
 - Bewertungen: echte Google-Bewertungen eintragen, Link auf das Google-Profil setzen
 - Produktdaten MHG (Modellbezeichnung, ggf. Produktfoto)
-- Ziel-URL (Webhook) im Funnel eintragen – sonst Testmodus ohne Versand
+- Funnels senden über das Framer-Formular von `/kontakt` (Eigenschaft „Framer-Formular“) an dasselbe Ziel wie das Kontaktformular. Nach dem Publish einmal testweise absenden. „Webhook (optional)“ schickt zusätzlich an ein CRM.
 - Navigation/Footer um Klimaanlage & Wärmepumpe ergänzen; Querverweis auf der Klima-Seite zeigt noch auf `/dienstleistungen/wärmepumpen`
