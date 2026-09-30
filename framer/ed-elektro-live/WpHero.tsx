@@ -48,13 +48,13 @@ export default function WpHero(props: WpHeroProps) {
     }
 
     const css = `
-.${scope} { width: 100%; background: linear-gradient(180deg, ${tokens.color.surfaceAlt} 0%, #fff 100%); font-family: ${fontFamily.body}; color: ${tokens.color.textMuted}; }
+.${scope} { container-type: inline-size; width: 100%; background: linear-gradient(180deg, ${tokens.color.surfaceAlt} 0%, #fff 100%); font-family: ${fontFamily.body}; color: ${tokens.color.textMuted}; }
 .${scope} *, .${scope} *::before, .${scope} *::after { box-sizing: border-box; }
 .${scope}__inner { width: 100%; max-width: ${tokens.maxWidth}px; margin: 0 auto; padding: ${tokens.space[7]}px ${tokens.space[4]}px ${tokens.space[8]}px;
   display: grid; grid-template-columns: minmax(0,1fr); gap: ${tokens.space[7]}px; align-items: center; }
 .${scope}__badge { display: inline-flex; padding: 6px 12px; border-radius: 999px; background: ${tokens.color.primary}; color: #fff; font-size: .875rem; line-height: 1.3; font-weight: 700; letter-spacing: .02em; }
-.${scope}__h1 { margin: ${tokens.space[4]}px 0 0; font-family: ${fontFamily.heading}; font-size: clamp(1.875rem, 7.6vw, 2.25rem); font-weight: 700; line-height: 1.12; overflow-wrap: break-word; letter-spacing: -0.02em; color: ${tokens.color.text}; }
-.${scope}__sub { margin: ${tokens.space[4]}px 0 0; max-width: 54ch; font-size: ${tokens.font.body}; line-height: 1.55; }
+.${scope}__h1 { margin: ${tokens.space[4]}px 0 0; font-family: ${fontFamily.heading}; font-size: clamp(1.875rem, 7.6cqi, 2.25rem); font-weight: 700; line-height: 1.12; overflow-wrap: break-word; letter-spacing: -0.02em; color: ${tokens.color.text}; }
+.${scope}__sub { margin: ${tokens.space[4]}px 0 0; max-width: 54ch; font-size: clamp(1rem, 1.2cqi, 1.125rem); line-height: 1.55; }
 .${scope}__frage { margin-top: ${tokens.space[6]}px; padding: ${tokens.space[5]}px; border-radius: ${tokens.radius.md}px; background: #fff; border: 1px solid ${tokens.color.line}; box-shadow: 0 18px 40px -24px rgba(15,23,42,.35); }
 .${scope}__fl { margin: 0 0 ${tokens.space[3]}px; font-size: 1rem; font-weight: 600; color: ${tokens.color.text}; }
 .${scope}__btns { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: ${tokens.space[3]}px; }
@@ -77,17 +77,17 @@ export default function WpHero(props: WpHeroProps) {
 .${scope}__f1 { top: 12px; left: 12px; }
 .${scope}__f2 { top: 42%; right: 12px; }
 .${scope}__f3 { bottom: 16px; left: 16px; }
-@media (min-width: ${breakpoints.tablet}px) {
+@container (min-width: ${breakpoints.tablet}px) {
   .${scope}__inner { padding: ${tokens.space[8]}px ${tokens.space[6]}px ${tokens.space[9]}px; }
-  .${scope}__h1 { font-size: ${tokens.font.h1}; line-height: 1.08; }
+  .${scope}__h1 { font-size: clamp(2.1rem, 5cqi, 3.6rem); line-height: 1.08; }
   .${scope}__list { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
-@media (min-width: ${breakpoints.desktop}px) {
+@container (min-width: ${breakpoints.desktop}px) {
   .${scope}__inner { grid-template-columns: minmax(0,1.08fr) minmax(0,1fr); gap: ${tokens.space[8]}px; }
   .${scope}__img { aspect-ratio: 4 / 3.4; }
   .${scope}__f1 { top: 16px; left: -28px; } .${scope}__f2 { right: -28px; }
 }
-@media (max-width: 480px) { .${scope}__float { display: none; } .${scope}__f1 { display: flex; } }
+@container (max-width: 480px) { .${scope}__float { display: none; } .${scope}__f1 { display: flex; } }
 `
 
     return (

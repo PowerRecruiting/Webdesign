@@ -75,23 +75,24 @@ function useScope(prefix: string) {
 }
 
 const baseCss = (s: string, bg: string) => `
-.${s} { width: 100%; background: ${bg}; font-family: ${fontFamily.body}; color: ${tokens.color.textMuted}; }
+.${s} { container-type: inline-size; width: 100%; background: ${bg}; font-family: ${fontFamily.body}; color: ${tokens.color.textMuted}; }
 .${s} *, .${s} *::before, .${s} *::after { box-sizing: border-box; }
 .${s} h2, .${s} h3, .${s} p, .${s} li, .${s} span { overflow-wrap: break-word; }
 .${s}__inner { width: 100%; max-width: ${tokens.maxWidth}px; margin: 0 auto; padding: ${tokens.space[7]}px ${tokens.space[4]}px; }
 .${s}__head { display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin: 0 0 ${tokens.space[6]}px; max-width: 760px; }
 .${s}__pill { display: inline-flex; padding: 5px 12px; border-radius: 999px; background: #EAF0FC; color: ${tokens.color.primary}; font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-.${s}__h2 { margin: ${tokens.space[3]}px 0 0; font-family: ${fontFamily.heading}; font-size: ${tokens.font.h2}; font-weight: 700; line-height: 1.15; letter-spacing: -0.015em; color: ${tokens.color.text}; }
-.${s}__intro { margin: ${tokens.space[3]}px 0 0; font-size: ${tokens.font.body}; line-height: 1.55; }
+.${s}__h2 { margin: ${tokens.space[3]}px 0 0; font-family: ${fontFamily.heading}; font-size: clamp(1.6rem, 4cqi, 2.4rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.015em; color: ${tokens.color.text}; }
+.${s}__intro { margin: ${tokens.space[3]}px 0 0; font-size: clamp(1rem, 1.2cqi, 1.125rem); line-height: 1.55; }
 .${s}__ctaWrap { display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin-top: ${tokens.space[6]}px; }
 .${s}__cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 54px; padding: 14px 24px; text-align: center; line-height: 1.25; border-radius: ${tokens.radius.md}px;
   background: ${tokens.color.primary}; color: #fff; font-family: ${fontFamily.heading}; font-size: 1.0625rem; font-weight: 600; text-decoration: none; }
 .${s}__cta:hover { background: ${tokens.color.primaryDark}; }
 .${s}__ctaNote { font-size: .875rem; line-height: 1.45; color: #64748B; text-align: center; }
-@media (min-width: ${breakpoints.tablet}px) {
+@container (min-width: ${breakpoints.tablet}px) {
   .${s}__inner { padding: ${tokens.space[9]}px ${tokens.space[6]}px; }
   .${s}__head { margin-bottom: ${tokens.space[7]}px; }
   .${s}__ctaWrap { flex-direction: row; align-items: center; gap: 16px; margin-top: ${tokens.space[7]}px; }
+  .${s}__cta { white-space: nowrap; flex: 0 0 auto; }
   .${s}__ctaNote { text-align: left; }
 }
 `
@@ -156,8 +157,8 @@ export function Qualifikationen(props: { titel: string; items: { titel: string; 
   border: 2px solid ${tokens.color.primary}; color: ${tokens.color.primary}; }
 .${s}__bt { display: block; font-family: ${fontFamily.heading}; font-size: .875rem; font-weight: 700; color: ${tokens.color.text}; line-height: 1.2; }
 .${s}__bx { display: block; font-size: .8125rem; color: #64748B; line-height: 1.3; margin-top: 2px; }
-@media (min-width: ${breakpoints.tablet}px) { .${s}__row { grid-template-columns: repeat(3, minmax(0,1fr)); gap: ${tokens.space[3]}px; } .${s}__bt { font-size: .9375rem; } .${s}__seal { width: 40px; height: 40px; flex-basis: 40px; } }
-@media (min-width: ${breakpoints.desktop}px) { .${s}__row { grid-template-columns: repeat(${Math.max(items.length, 1)}, minmax(0,1fr)); } }
+@container (min-width: ${breakpoints.tablet}px) { .${s}__row { grid-template-columns: repeat(3, minmax(0,1fr)); gap: ${tokens.space[3]}px; } .${s}__bt { font-size: .9375rem; } .${s}__seal { width: 40px; height: 40px; flex-basis: 40px; } }
+@container (min-width: ${breakpoints.desktop}px) { .${s}__row { grid-template-columns: repeat(${Math.max(items.length, 1)}, minmax(0,1fr)); } }
 `
     return (
         <section lang="de" className={s} style={style} aria-label={titel}>
@@ -207,12 +208,12 @@ export function FoerderungKurz(props: Base & { pill: string; service: { text: st
 .${s}__grid .${s}__head { align-items: flex-start; text-align: left; margin: 0; }
 .${s}__hint { margin: ${tokens.space[4]}px 0 0; display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: ${tokens.radius.sm}px; background: #FEF3C7; color: #78350F; font-size: .9375rem; line-height: 1.45; }
 .${s}__card { padding: ${tokens.space[5]}px; border-radius: ${tokens.radius.lg}px; background: ${tokens.color.navy}; color: ${tokens.color.textMutedOnDark}; }
-.${s}__ct { margin: 0; font-family: ${fontFamily.heading}; font-size: ${tokens.font.h3}; font-weight: 700; color: #fff; }
+.${s}__ct { margin: 0; font-family: ${fontFamily.heading}; font-size: clamp(1.15rem, 2cqi, 1.4rem); font-weight: 700; color: #fff; }
 .${s}__list { margin: ${tokens.space[5]}px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
 .${s}__list li { display: flex; gap: 10px; align-items: flex-start; font-size: 1rem; line-height: 1.45; color: #fff; }
 .${s}__list svg { flex: 0 0 auto; margin-top: 2px; color: #7FA8F0; }
 .${s}__foot { margin: ${tokens.space[5]}px 0 0; font-size: .8125rem; line-height: 1.5; color: #A7B4C8; }
-@media (min-width: ${breakpoints.desktop}px) { .${s}__grid { grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: ${tokens.space[8]}px; } }
+@container (min-width: ${breakpoints.desktop}px) { .${s}__grid { grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: ${tokens.space[8]}px; } }
 `
     return (
         <section lang="de" aria-labelledby={headingId} className={s} style={style}>
@@ -283,7 +284,7 @@ export function SchritteBilder(props: Base & { pill: string; steps: { titel: str
 .${s}__img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: ${tokens.radius.md}px; }
 
 /* Desktop: drei gleich hohe Karten nebeneinander, Bild oben, Nummer auf der Bildkante */
-@media (min-width: 900px) {
+@container (min-width: 900px) {
   .${s}__list { grid-template-columns: repeat(${Math.max(steps.length, 1)}, minmax(0,1fr)); gap: ${tokens.space[5]}px; }
   .${s}__step { display: flex; flex-direction: column; padding: 0; border: 1px solid ${tokens.color.line}; border-radius: ${tokens.radius.lg}px;
     background: #fff; overflow: hidden; box-shadow: 0 18px 40px -30px rgba(15,23,42,.5); }
@@ -361,7 +362,7 @@ export function Vorteile(props: Base & { pill: string; items: { label: string; t
 .${s}__t { margin: 4px 0 0; font-family: ${fontFamily.heading}; font-size: 1.125rem; font-weight: 700; color: ${tokens.color.text}; }
 .${s}__x { margin: 6px 0 0; font-size: .9375rem; line-height: 1.55; }
 .${s}__grid { gap: 10px ${tokens.space[6]}px; }
-@media (min-width: ${breakpoints.tablet}px) {
+@container (min-width: ${breakpoints.tablet}px) {
   .${s}__grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: ${tokens.space[4]}px ${tokens.space[6]}px; }
   .${s}__item { grid-template-columns: 64px minmax(0,1fr); gap: ${tokens.space[4]}px; padding: ${tokens.space[5]}px; }
   .${s}__n { font-size: 2.5rem; }
@@ -430,7 +431,7 @@ export function HeizungsVergleich(props: Base & { pill: string; kriterien: Krite
 .${s}__row--wp .${s}__bar span { background: ${tokens.color.success}; }
 .${s}__row--wp .${s}__lab { color: ${tokens.color.success}; font-weight: 700; }
 .${s}__foot { margin: ${tokens.space[4]}px 0 0; max-width: 820px; text-align: left; font-size: .8125rem; line-height: 1.55; color: #64748B; }
-@media (min-width: ${breakpoints.tablet}px) { .${s}__grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@container (min-width: ${breakpoints.tablet}px) { .${s}__grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
 `
     const fmt = (n: number, e: string) => e === "€" ? `${Math.round(n).toLocaleString("de-DE")} €` : e === "%" ? `${n} %` : `${n.toLocaleString("de-DE")} ${e}`
     return (
@@ -515,7 +516,7 @@ export function ProduktMHG(props: Base & { pill: string; bild: Img; kennzahlen: 
 .${s}__dr { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-bottom: 1px solid ${tokens.color.line}; font-size: .9375rem; }
 .${s}__dr dt { color: #64748B; font-size: .875rem; } .${s}__dr dd { margin: 0; font-weight: 600; color: ${tokens.color.text}; }
 .${s}__hin { margin: ${tokens.space[4]}px 0 0; font-size: .875rem; color: #64748B; }
-@media (min-width: ${breakpoints.tablet}px) {
+@container (min-width: ${breakpoints.tablet}px) {
   .${s}__box { grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding: ${tokens.space[5]}px; gap: ${tokens.space[6]}px; }
   .${s}__kw { font-size: 1.375rem; }
   .${s}__dr { flex-direction: row; justify-content: space-between; gap: 16px; }
@@ -587,7 +588,7 @@ export function Bewertungen(props: Base & { pill: string; note: string; anzahl: 
 .${s}__card { padding: ${tokens.space[5]}px; border-radius: ${tokens.radius.md}px; border: 1px solid ${tokens.color.line}; }
 .${s}__q { margin: 8px 0 0; font-size: .9375rem; line-height: 1.55; color: ${tokens.color.text}; }
 .${s}__who { margin-top: 12px; font-size: .875rem; color: #64748B; }
-@media (min-width: ${breakpoints.tablet}px) { .${s}__grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@container (min-width: ${breakpoints.tablet}px) { .${s}__grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
 `
     return (
         <section lang="de" aria-labelledby={headingId} className={s} style={style}>

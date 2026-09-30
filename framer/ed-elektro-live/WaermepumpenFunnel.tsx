@@ -200,7 +200,8 @@ export default function WaermepumpenFunnel(props) {
     const fortschritt = fertig || phase === "ergebnis" || phase === "kontakt" ? 100 : Math.round((index / total) * 100)
 
     return (
-        <div className="edw" style={{ ...style, ...S.root, ["--edw-accent" as any]: accent }}>
+        <div className="edw-cq" style={{ ...style, width: "100%", containerType: "inline-size" } as any}>
+        <div className="edw" style={{ ...S.root, ["--edw-accent" as any]: accent }}>
             <style>{CSS}</style>
 
             {zeigeKopf && (index > 0 || phase !== "fragen") && (
@@ -232,6 +233,7 @@ export default function WaermepumpenFunnel(props) {
                     <Frage key={schritt.id} f={schritt} gewaehlt={a[schritt.id]} onWahl={(o) => antworte(schritt.id, o)} />
                 )}
             </div>
+        </div>
         </div>
     )
 }
@@ -766,7 +768,7 @@ const S = {
     fill: { height: "100%", borderRadius: 999, background: "var(--edw-accent)", transition: "width .35s ease" },
     buehne: { maxWidth: 1080, width: "100%", margin: "0 auto", paddingTop: 40, display: "flex", justifyContent: "center" },
     inner: { display: "flex", flexDirection: "column", width: "100%", alignItems: "stretch" },
-    titel: { margin: 0, fontSize: "clamp(23px, 2.7vw, 34px)", lineHeight: 1.2, fontWeight: 700, color: "#000", textAlign: "center", letterSpacing: "-0.01em" },
+    titel: { margin: 0, fontSize: "clamp(23px, 2.7cqi, 34px)", lineHeight: 1.2, fontWeight: 700, color: "#000", textAlign: "center", letterSpacing: "-0.01em" },
     unter: { margin: "12px auto 0", maxWidth: 620, fontSize: 16, lineHeight: 1.6, color: "#444", textAlign: "center" },
     grid: { display: "grid", gap: 16, marginTop: 34, width: "100%", marginLeft: "auto", marginRight: "auto" },
 }
@@ -805,7 +807,7 @@ const CSS = `
 .edw-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); white-space:nowrap; padding:4px 12px;
   border-radius:999px; background:var(--edw-accent); color:#fff; font-size:13px; font-weight:700; }
 .edw-preis-lab { font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748B; }
-.edw-preis-zahl { font-size:clamp(28px,3.6vw,40px); font-weight:800; color:var(--edw-accent); font-variant-numeric:tabular-nums; line-height:1.15; white-space:nowrap; }
+.edw-preis-zahl { font-size:clamp(28px,3.6cqi,40px); font-weight:800; color:var(--edw-accent); font-variant-numeric:tabular-nums; line-height:1.15; white-space:nowrap; }
 .edw-preis-sub { font-size:14px; color:#475569; font-variant-numeric:tabular-nums; }
 .edw-preis-note { margin-top:4px; font-size:14px; line-height:1.5; color:#475569; max-width:320px; }
 
@@ -867,12 +869,12 @@ const CSS = `
   align-self:center; background:rgba(29,91,207,.1); color:var(--edw-accent); }
 .edw-ok svg { width:32px; height:32px; }
 
-@media (max-width: 900px) {
+@container (max-width: 900px) {
   .edw-grid { grid-template-columns:repeat(3,minmax(0,1fr)) !important; max-width:100% !important; }
   .edw-two { grid-template-columns:1fr; }
   .edw-preise { gap:26px; }
 }
-@media (max-width: 640px) {
+@container (max-width: 640px) {
   .edw { border-radius:0 !important; padding:20px 16px 36px !important; }
   .edw-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; max-width:100% !important; gap:10px; margin-top:24px !important; }
   .edw-card { min-height:128px; padding:16px 10px; gap:8px; }
