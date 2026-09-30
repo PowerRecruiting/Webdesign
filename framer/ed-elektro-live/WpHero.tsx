@@ -69,13 +69,13 @@ export default function WpHero(props: WpHeroProps) {
 .${scope}__tel { display: inline-flex; margin-top: ${tokens.space[4]}px; font-size: .9375rem; color: ${tokens.color.textMuted}; }
 .${scope}__tel a { margin-left: 6px; color: ${tokens.color.primary}; font-weight: 600; text-decoration: none; font-variant-numeric: tabular-nums; }
 .${scope}__media { position: relative; }
-.${scope}__img { display: block; width: 100%; aspect-ratio: 4 / 3.4; object-fit: cover; border-radius: ${tokens.radius.lg}px; }
+.${scope}__img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: ${tokens.radius.lg}px; }
 .${scope}__float { position: absolute; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 12px; background: #fff;
   box-shadow: 0 14px 30px -12px rgba(15,23,42,.35); font-size: .8125rem; line-height: 1.3; color: ${tokens.color.textMuted}; }
 .${scope}__float b { display: block; font-family: ${fontFamily.heading}; font-size: .9375rem; color: ${tokens.color.text}; }
 .${scope}__float i { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; background: #EAF0FC; color: ${tokens.color.primary}; font-style: normal; font-weight: 800; }
-.${scope}__f1 { top: 16px; left: -8px; }
-.${scope}__f2 { top: 42%; right: -8px; }
+.${scope}__f1 { top: 12px; left: 12px; }
+.${scope}__f2 { top: 42%; right: 12px; }
 .${scope}__f3 { bottom: 16px; left: 16px; }
 @media (min-width: ${breakpoints.tablet}px) {
   .${scope}__inner { padding: ${tokens.space[8]}px ${tokens.space[6]}px ${tokens.space[9]}px; }
@@ -83,7 +83,8 @@ export default function WpHero(props: WpHeroProps) {
 }
 @media (min-width: ${breakpoints.desktop}px) {
   .${scope}__inner { grid-template-columns: minmax(0,1.08fr) minmax(0,1fr); gap: ${tokens.space[8]}px; }
-  .${scope}__f1 { left: -28px; } .${scope}__f2 { right: -28px; }
+  .${scope}__img { aspect-ratio: 4 / 3.4; }
+  .${scope}__f1 { top: 16px; left: -28px; } .${scope}__f2 { right: -28px; }
 }
 @media (max-width: 480px) { .${scope}__float { display: none; } .${scope}__f1 { display: flex; } }
 `

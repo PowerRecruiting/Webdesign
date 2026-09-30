@@ -77,17 +77,22 @@ function useScope(prefix: string) {
 const baseCss = (s: string, bg: string) => `
 .${s} { width: 100%; background: ${bg}; font-family: ${fontFamily.body}; color: ${tokens.color.textMuted}; }
 .${s} *, .${s} *::before, .${s} *::after { box-sizing: border-box; }
-.${s}__inner { width: 100%; max-width: ${tokens.maxWidth}px; margin: 0 auto; padding: ${tokens.space[8]}px ${tokens.space[4]}px; }
-.${s}__head { display: flex; flex-direction: column; align-items: center; text-align: center; margin: 0 auto ${tokens.space[7]}px; max-width: 760px; }
+.${s}__inner { width: 100%; max-width: ${tokens.maxWidth}px; margin: 0 auto; padding: ${tokens.space[7]}px ${tokens.space[4]}px; }
+.${s}__head { display: flex; flex-direction: column; align-items: flex-start; text-align: left; margin: 0 0 ${tokens.space[6]}px; max-width: 760px; }
 .${s}__pill { display: inline-flex; padding: 5px 12px; border-radius: 999px; background: #EAF0FC; color: ${tokens.color.primary}; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .${s}__h2 { margin: ${tokens.space[3]}px 0 0; font-family: ${fontFamily.heading}; font-size: ${tokens.font.h2}; font-weight: 700; line-height: 1.15; letter-spacing: -0.015em; color: ${tokens.color.text}; }
 .${s}__intro { margin: ${tokens.space[3]}px 0 0; font-size: ${tokens.font.body}; line-height: 1.55; }
-.${s}__ctaWrap { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: ${tokens.space[7]}px; }
+.${s}__ctaWrap { display: flex; flex-direction: column; align-items: stretch; gap: 8px; margin-top: ${tokens.space[6]}px; }
 .${s}__cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 28px; border-radius: ${tokens.radius.md}px;
   background: ${tokens.color.primary}; color: #fff; font-family: ${fontFamily.heading}; font-size: 1.0625rem; font-weight: 600; text-decoration: none; }
 .${s}__cta:hover { background: ${tokens.color.primaryDark}; }
-.${s}__ctaNote { font-size: .8125rem; color: #64748B; }
-@media (min-width: ${breakpoints.tablet}px) { .${s}__inner { padding: ${tokens.space[9]}px ${tokens.space[6]}px; } }
+.${s}__ctaNote { font-size: .8125rem; line-height: 1.4; color: #64748B; text-align: center; }
+@media (min-width: ${breakpoints.tablet}px) {
+  .${s}__inner { padding: ${tokens.space[9]}px ${tokens.space[6]}px; }
+  .${s}__head { margin-bottom: ${tokens.space[7]}px; }
+  .${s}__ctaWrap { flex-direction: row; align-items: center; gap: 16px; margin-top: ${tokens.space[7]}px; }
+  .${s}__ctaNote { text-align: left; }
+}
 `
 
 function Head({ s, id, pill, heading, intro }: { s: string; id: string; pill?: string; heading: string; intro?: string }) {
@@ -143,15 +148,14 @@ export function Qualifikationen(props: { titel: string; items: { titel: string; 
     const { scope: s } = useScope("ed-qual")
     const css = baseCss(s, "#fff") + `
 .${s}__inner { padding-top: ${tokens.space[6]}px; padding-bottom: ${tokens.space[6]}px; }
-.${s}__t { margin: 0 0 ${tokens.space[4]}px; text-align: center; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #64748B; }
-.${s}__row { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: ${tokens.space[3]}px; margin: 0; padding: 0; list-style: none; }
-.${s}__b { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid ${tokens.color.line}; border-radius: ${tokens.radius.sm + 4}px; }
-.${s}__seal { width: 40px; height: 40px; flex: 0 0 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+.${s}__t { margin: 0 0 ${tokens.space[3]}px; text-align: left; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #64748B; }
+.${s}__row { display: grid; grid-template-columns: minmax(0,1fr); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.${s}__b { display: flex; align-items: center; gap: 12px; padding: 8px 12px; min-width: 0; border: 1px solid ${tokens.color.line}; border-radius: ${tokens.radius.sm + 4}px; }
+.${s}__seal { width: 30px; height: 30px; flex: 0 0 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
   border: 2px solid ${tokens.color.primary}; color: ${tokens.color.primary}; }
-.${s}__bt { display: block; font-family: ${fontFamily.heading}; font-size: .9375rem; font-weight: 700; color: ${tokens.color.text}; line-height: 1.2; }
+.${s}__bt { display: block; font-family: ${fontFamily.heading}; font-size: .875rem; font-weight: 700; color: ${tokens.color.text}; line-height: 1.2; }
 .${s}__bx { display: block; font-size: .75rem; color: #64748B; line-height: 1.3; margin-top: 2px; }
-@media (max-width: 479px) { .${s}__row { grid-template-columns: minmax(0,1fr); } }
-@media (min-width: ${breakpoints.tablet}px) { .${s}__row { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (min-width: ${breakpoints.tablet}px) { .${s}__row { grid-template-columns: repeat(3, minmax(0,1fr)); gap: ${tokens.space[3]}px; } .${s}__bt { font-size: .9375rem; } .${s}__seal { width: 40px; height: 40px; flex-basis: 40px; } }
 @media (min-width: ${breakpoints.desktop}px) { .${s}__row { grid-template-columns: repeat(${Math.max(items.length, 1)}, minmax(0,1fr)); } }
 `
     return (
@@ -258,18 +262,37 @@ export function SchritteBilder(props: Base & { pill: string; steps: { titel: str
     } = props
     const steps = Array.isArray(stepsIn) && stepsIn.length ? stepsIn : D_SCHRITTEBILDER_STEPS
     const { headingId, scope: s } = useScope("ed-sch")
+    // Bilder aus Array-Eigenschaften gehen in Framer beim Speichern teils verloren –
+    // dann greift das vorgesehene Standardbild des jeweiligen Schritts.
+    const bildVon = (st: { bild?: Img }, i: number): Img | undefined =>
+        st.bild?.src ? st.bild : D_SCHRITTEBILDER_STEPS[i]?.bild
     const css = baseCss(s, "#fff") + `
-.${s}__list { display: flex; flex-direction: column; gap: ${tokens.space[5]}px; margin: 0; padding: 0; list-style: none; }
-.${s}__row { display: grid; grid-template-columns: minmax(0,1fr); gap: ${tokens.space[4]}px; align-items: center; }
-.${s}__img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: ${tokens.radius.lg}px; }
-.${s}__card { padding: ${tokens.space[5]}px; border-radius: ${tokens.radius.md}px; border: 1px solid ${tokens.color.line}; background: #fff; box-shadow: 0 16px 36px -26px rgba(15,23,42,.45); }
-.${s}__nr { display: inline-flex; padding: 4px 10px; border-radius: 999px; background: ${tokens.color.primary}; color: #fff; font-size: .75rem; font-weight: 700; letter-spacing: .04em; }
-.${s}__t { margin: ${tokens.space[3]}px 0 0; font-family: ${fontFamily.heading}; font-size: ${tokens.font.h3}; font-weight: 700; color: ${tokens.color.text}; }
-.${s}__x { margin: ${tokens.space[2]}px 0 0; font-size: 1rem; line-height: 1.55; }
-@media (min-width: ${breakpoints.tablet}px) {
-  .${s}__row { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: ${tokens.space[6]}px; }
-  .${s}__row:nth-child(even) .${s}__img { order: 2; }
-  .${s}__card { padding: ${tokens.space[6]}px; }
+.${s}__list { position: relative; display: grid; grid-template-columns: minmax(0,1fr); gap: 0; margin: 0; padding: 0; list-style: none; }
+.${s}__step { position: relative; display: grid; grid-template-columns: 40px minmax(0,1fr); gap: 0 ${tokens.space[4]}px; padding-bottom: ${tokens.space[6]}px; }
+.${s}__step:last-child { padding-bottom: 0; }
+/* Zeitleiste (Handy/Tablet): Linie zwischen den Nummern */
+.${s}__step:not(:last-child)::before { content: ""; position: absolute; left: 19px; top: 44px; bottom: 4px; width: 2px; background: repeating-linear-gradient(${tokens.color.primary} 0 6px, transparent 6px 12px); opacity: .35; }
+.${s}__num { grid-row: span 3; width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  background: ${tokens.color.primary}; color: #fff; font-family: ${fontFamily.heading}; font-size: 1.0625rem; font-weight: 800; box-shadow: 0 0 0 5px #EAF0FC; }
+.${s}__lab { display: block; margin-top: 9px; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: ${tokens.color.primary}; }
+.${s}__t { margin: 4px 0 0; font-family: ${fontFamily.heading}; font-size: 1.1875rem; font-weight: 700; line-height: 1.3; color: ${tokens.color.text}; }
+.${s}__x { margin: 6px 0 0; font-size: .9875rem; line-height: 1.55; }
+.${s}__body { display: contents; }
+.${s}__media { grid-column: 2; margin-top: ${tokens.space[4]}px; }
+.${s}__img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: ${tokens.radius.md}px; }
+
+/* Desktop: drei gleich hohe Karten nebeneinander, Bild oben, Nummer auf der Bildkante */
+@media (min-width: 900px) {
+  .${s}__list { grid-template-columns: repeat(${Math.max(steps.length, 1)}, minmax(0,1fr)); gap: ${tokens.space[5]}px; }
+  .${s}__step { display: flex; flex-direction: column; padding: 0; border: 1px solid ${tokens.color.line}; border-radius: ${tokens.radius.lg}px;
+    background: #fff; overflow: hidden; box-shadow: 0 18px 40px -30px rgba(15,23,42,.5); }
+  .${s}__step:not(:last-child)::before { display: none; }
+  .${s}__media { order: -1; margin: 0; }
+  .${s}__img { aspect-ratio: 4 / 3; border-radius: 0; }
+  .${s}__body { display: block; position: relative; padding: 34px ${tokens.space[5]}px ${tokens.space[5]}px; }
+  .${s}__num { position: absolute; top: -24px; left: ${tokens.space[5]}px; width: 48px; height: 48px; font-size: 1.25rem; box-shadow: 0 0 0 5px #fff; }
+  .${s}__lab { margin-top: 0; }
+  .${s}__t { font-size: 1.25rem; }
 }
 `
     return (
@@ -278,16 +301,24 @@ export function SchritteBilder(props: Base & { pill: string; steps: { titel: str
             <div className={`${s}__inner`}>
                 <Head s={s} id={headingId} pill={pill} heading={heading} intro={intro} />
                 <ol className={`${s}__list`}>
-                    {steps.map((st, i) => (
-                        <li key={i} className={`${s}__row`}>
-                            {st.bild?.src && <img className={`${s}__img`} src={st.bild.src} srcSet={st.bild.srcSet} alt={st.bild.alt ?? ""} loading="lazy" />}
-                            <div className={`${s}__card`}>
-                                <span className={`${s}__nr`}>SCHRITT {i + 1}</span>
-                                <h3 className={`${s}__t`}>{st.titel}</h3>
-                                <p className={`${s}__x`}>{st.text}</p>
-                            </div>
-                        </li>
-                    ))}
+                    {steps.map((st, i) => {
+                        const bild = bildVon(st, i)
+                        return (
+                            <li key={i} className={`${s}__step`}>
+                                <div className={`${s}__body`}>
+                                    <span className={`${s}__num`} aria-hidden="true">{i + 1}</span>
+                                    <span className={`${s}__lab`}>Schritt {i + 1}</span>
+                                    <h3 className={`${s}__t`}>{st.titel}</h3>
+                                    <p className={`${s}__x`}>{st.text}</p>
+                                </div>
+                                {bild?.src && (
+                                    <div className={`${s}__media`}>
+                                        <img className={`${s}__img`} src={bild.src} srcSet={bild.srcSet} alt={bild.alt ?? ""} loading="lazy" />
+                                    </div>
+                                )}
+                            </li>
+                        )
+                    })}
                 </ol>
                 {showCta && <Cta s={s} label={ctaLabel} note={ctaNote} modul="schritte" />}
             </div>
@@ -323,12 +354,16 @@ export function Vorteile(props: Base & { pill: string; items: { label: string; t
     const { headingId, scope: s } = useScope("ed-vort")
     const css = baseCss(s, tokens.color.surfaceAlt) + `
 .${s}__grid { display: grid; grid-template-columns: minmax(0,1fr); gap: ${tokens.space[4]}px ${tokens.space[6]}px; margin: 0; padding: 0; list-style: none; }
-.${s}__item { display: grid; grid-template-columns: 64px minmax(0,1fr); gap: ${tokens.space[4]}px; padding: ${tokens.space[5]}px; border-radius: ${tokens.radius.md}px; background: #fff; border: 1px solid ${tokens.color.line}; }
-.${s}__n { font-family: ${fontFamily.heading}; font-size: 2.5rem; font-weight: 800; line-height: 1; color: #C7D8F7; font-variant-numeric: tabular-nums; }
+.${s}__item { display: grid; grid-template-columns: minmax(0,1fr); gap: 6px; padding: ${tokens.space[4]}px ${tokens.space[4]}px ${tokens.space[5]}px; border-radius: ${tokens.radius.md}px; background: #fff; border: 1px solid ${tokens.color.line}; }
+.${s}__n { font-family: ${fontFamily.heading}; font-size: 1.5rem; font-weight: 800; line-height: 1; color: #C7D8F7; font-variant-numeric: tabular-nums; }
 .${s}__l { display: block; font-size: .75rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: ${tokens.color.success}; }
 .${s}__t { margin: 4px 0 0; font-family: ${fontFamily.heading}; font-size: 1.125rem; font-weight: 700; color: ${tokens.color.text}; }
 .${s}__x { margin: 6px 0 0; font-size: .9375rem; line-height: 1.55; }
-@media (min-width: ${breakpoints.tablet}px) { .${s}__grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (min-width: ${breakpoints.tablet}px) {
+  .${s}__grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .${s}__item { grid-template-columns: 64px minmax(0,1fr); gap: ${tokens.space[4]}px; padding: ${tokens.space[5]}px; }
+  .${s}__n { font-size: 2.5rem; }
+}
 `
     return (
         <section aria-labelledby={headingId} className={s} style={style}>
@@ -392,7 +427,7 @@ export function HeizungsVergleich(props: Base & { pill: string; kriterien: Krite
 .${s}__bar span { display: block; height: 100%; border-radius: 999px; background: #94A3B8; }
 .${s}__row--wp .${s}__bar span { background: ${tokens.color.success}; }
 .${s}__row--wp .${s}__lab { color: ${tokens.color.success}; font-weight: 700; }
-.${s}__foot { margin: ${tokens.space[4]}px auto 0; max-width: 820px; text-align: center; font-size: .75rem; line-height: 1.55; color: #64748B; }
+.${s}__foot { margin: ${tokens.space[4]}px 0 0; max-width: 820px; text-align: left; font-size: .75rem; line-height: 1.55; color: #64748B; }
 @media (min-width: ${breakpoints.tablet}px) { .${s}__grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
 `
     const fmt = (n: number, e: string) => e === "€" ? `${Math.round(n).toLocaleString("de-DE")} €` : e === "%" ? `${n} %` : `${n.toLocaleString("de-DE")} ${e}`
@@ -468,17 +503,23 @@ export function ProduktMHG(props: Base & { pill: string; bild: Img; kennzahlen: 
     const css = baseCss(s, tokens.color.surfaceAlt) + `
 .${s}__box { display: grid; grid-template-columns: minmax(0,1fr); gap: ${tokens.space[5]}px; padding: ${tokens.space[4]}px; border-radius: ${tokens.radius.lg}px; background: #fff; border: 1px solid ${tokens.color.line}; }
 .${s}__media { position: relative; }
-.${s}__img { display: block; width: 100%; height: 100%; min-height: 280px; object-fit: cover; border-radius: ${tokens.radius.md}px; }
+.${s}__img { display: block; width: 100%; height: 100%; min-height: 220px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: ${tokens.radius.md}px; }
 .${s}__tag { position: absolute; top: 14px; left: 14px; padding: 5px 12px; border-radius: 999px; background: ${tokens.color.success}; color: #fff; font-size: .75rem; font-weight: 700; }
 .${s}__k { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: ${tokens.space[3]}px; }
-.${s}__kz { padding: 14px 10px; border-radius: ${tokens.radius.sm + 2}px; background: ${tokens.color.surfaceAlt}; text-align: center; }
-.${s}__kw { display: block; font-family: ${fontFamily.heading}; font-size: 1.375rem; font-weight: 800; color: ${tokens.color.success}; }
+.${s}__kz { padding: 12px 6px; border-radius: ${tokens.radius.sm + 2}px; background: ${tokens.color.surfaceAlt}; text-align: center; }
+.${s}__kw { display: block; font-family: ${fontFamily.heading}; font-size: 1.0625rem; white-space: nowrap; font-weight: 800; color: ${tokens.color.success}; }
 .${s}__kl { display: block; margin-top: 2px; font-size: .75rem; color: #64748B; }
 .${s}__dl { margin: ${tokens.space[4]}px 0 0; }
-.${s}__dr { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid ${tokens.color.line}; font-size: .9375rem; }
-.${s}__dr dt { color: #64748B; } .${s}__dr dd { margin: 0; font-weight: 600; color: ${tokens.color.text}; text-align: right; }
+.${s}__dr { display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-bottom: 1px solid ${tokens.color.line}; font-size: .9375rem; }
+.${s}__dr dt { color: #64748B; font-size: .8125rem; } .${s}__dr dd { margin: 0; font-weight: 600; color: ${tokens.color.text}; }
 .${s}__hin { margin: ${tokens.space[4]}px 0 0; font-size: .8125rem; color: #64748B; }
-@media (min-width: ${breakpoints.tablet}px) { .${s}__box { grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding: ${tokens.space[5]}px; gap: ${tokens.space[6]}px; } }
+@media (min-width: ${breakpoints.tablet}px) {
+  .${s}__box { grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding: ${tokens.space[5]}px; gap: ${tokens.space[6]}px; }
+  .${s}__kw { font-size: 1.375rem; }
+  .${s}__dr { flex-direction: row; justify-content: space-between; gap: 16px; }
+  .${s}__dr dt { font-size: .9375rem; } .${s}__dr dd { text-align: right; }
+  .${s}__img { aspect-ratio: auto; }
+}
 `
     return (
         <section aria-labelledby={headingId} className={s} style={style}>
@@ -535,7 +576,7 @@ export function Bewertungen(props: Base & { pill: string; note: string; anzahl: 
     } = props
     const { headingId, scope: s } = useScope("ed-bew")
     const css = baseCss(s, "#fff") + `
-.${s}__sum { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 20px; margin: 0 auto ${tokens.space[6]}px; padding: ${tokens.space[4]}px ${tokens.space[5]}px;
+.${s}__sum { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 12px 20px; margin: 0 0 ${tokens.space[6]}px; padding: ${tokens.space[4]}px ${tokens.space[5]}px;
   max-width: 560px; border-radius: ${tokens.radius.md}px; background: ${tokens.color.surfaceAlt}; }
 .${s}__g { font-family: ${fontFamily.heading}; font-size: 2.25rem; font-weight: 800; color: ${tokens.color.text}; }
 .${s}__stars { color: #F5B301; font-size: 1.25rem; letter-spacing: 2px; }
