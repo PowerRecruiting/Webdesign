@@ -10,17 +10,18 @@ Framer-Projekt „ED-Elektro“ (GRncpWfUFfXslEuDw7mt). Beide Seiten als **Entwu
 ## Aufbau `/waermepumpe`
 
 1. **Hero** (`WpHero`) – Frage 1 direkt im Hero (Bestandsgebäude / Neubau → `/waermepumpe/preis?bauart=…`, Rechner startet bei Frage 2), 4 Häkchen, Bild mit Badges
-2. Vertrauensleiste (`TrustBar`)
-3. **Qualifikationen** – Meister, Elektro-/Klimakonzession, Techniker/Bachelor, 4,6 ★ Google (statt Siegel-Logos)
+2. Vertrauensleiste (`TrustBar`) – „Meisterbetrieb für Elektrotechnik, Heizung und Sanitär“ (WP-01)
+3. **Qualifikationen** – Meister (Elektro, Heizung, Sanitär), Elektro-/Klimakonzession, Techniker/Bachelor, 4,6 ★ Google (statt Siegel-Logos)
 4. **Förderung** (`FoerderungKurz`) – knapp erklärt, ohne Kacheln; Full-Service „Das übernehmen wir für Sie“
 5. **In 3 Schritten** (`SchritteBilder`) – mit Bildern, abwechselnd
 6. **6 Gründe** (`Vorteile`)
 7. **Wärmepumpe vs. Gas/Öl** (`HeizungsVergleich`) – Beispielwerte, alle editierbar
 8. **Produkt** (`ProduktMHG`) – Eckdaten, Bild aus eigenem Projekt
+8b. **Heizung und Elektrik aus einer Hand** (`AusEinerHand`, WP-04) – Textvorschlag, **Freigabe Jemmy offen**
 9. Warum Ihre Nachbarn ED Elektro wählen (`Comparison`)
 10. Preis und Leistungsumfang (`PriceTransparency`)
 11. **Bewertungen** – Google-Note + Link; Liste echter Bewertungen startet leer
-12. FAQ (mit FAQ-Markup) · Einzugsgebiet · Querverweis Klimaanlage · Abschluss-CTA · Sticky-Button mobil
+12. FAQ (mit FAQ-Markup, inkl. Elektrik-Frage WP-05) · Einzugsgebiet · Querverweis Klimaanlage · Abschluss-CTA · Sticky-Button mobil
 
 Jedes neue Modul endet mit „Preis und Förderung prüfen“ → `/waermepumpe/preis` (Google-Ads-Parameter werden mitgenommen).
 
@@ -35,6 +36,11 @@ Jedes neue Modul endet mit „Preis und Förderung prüfen“ → `/waermepumpe/
 - **In GTM prüfen:** GA4- und Google-Ads-Tags respektieren Consent Mode automatisch. Tags anderer Anbieter (z. B. Meta Pixel oder Hotjar) brauchen unter „Einwilligungseinstellungen“ die zusätzliche Einwilligung `ad_storage` oder `analytics_storage`, oder sie werden über das Event `cookie_consent_update` ausgelöst.
 
 ## Vor dem Livegang prüfen
+
+- **WP-03:** `/waermepumpe` und `/waermepumpe/preis` sind Entwürfe (Draft) und werden deshalb nicht veröffentlicht. In der Framer-Vorschau führen die Hero-Buttons (`/waermepumpe/preis?bauart=…`) ins Leere. Zum Launch bei beiden Seiten „Draft“ ausschalten, veröffentlichen und auf der Live-URL mobil und am Desktop bis zum Versand durchklicken.
+- **WP-02:** Logos (Meisterbetrieb, Elektrokonzession) fehlen noch. Danach 1–2 Symbole in Vertrauensleiste/Qualifikationen ersetzen.
+- **WP-04:** Text „Aus einer Hand“ von Jemmy freigeben lassen. Danach Callouts in Google Ads ergänzen (WP-07).
+- **WP-06:** Referenz-Kurzstory erst nach Kundenfreigabe.
 
 - Vergleichswerte (Heizkosten, CO₂) und Förderangaben (Stand 21.07.2026) freigeben
 - Qualifikationen: Bezeichnungen der Konzessionen/Abschlüsse bestätigen

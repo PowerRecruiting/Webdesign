@@ -36,6 +36,12 @@ const D_HEIZUNGSVERGLEICH_KRITERIEN = [
             { titel: "CO₂-Ausstoß pro Jahr", einheit: "t", wp: 2.2, gas: 4.5, oel: 5.9, besser: "niedrig" },
             { titel: "Mögliche Förderung", einheit: "%", wp: 80, gas: 0, oel: 0, besser: "hoch" },
         ]
+const D_AUSEINERHAND_PUNKTE = [
+    { text: "Eigene Meister für Elektrotechnik, Heizung und Sanitär" },
+    { text: "Elektrik von Anfang an geplant und eingepreist" },
+    { text: "Keine Nachträge, kein zweiter Handwerker" },
+    { text: "Planung und Montage aus einer Hand" },
+]
 const D_PRODUKTMHG_KENNZAHLEN = [
             { wert: "6–18 kW", label: "Leistungsklassen" },
             { wert: "bis 80 %", label: "Förderung" },
@@ -62,6 +68,7 @@ const D_PRODUKTMHG_DATEN = [
  *   Vorteile          6 nummerierte Gründe
  *   HeizungsVergleich Wärmepumpe vs. Gas/Öl (Beispielwerte, editierbar)
  *   ProduktMHG        Produktmodul mit Eckdaten
+ *   AusEinerHand      USP: Elektro- und SHK-Meister planen gemeinsam
  *   Bewertungen       Google-Bewertung + echte Kundenstimmen (Liste startet leer)
  */
 
@@ -560,6 +567,74 @@ addPropertyControls(ProduktMHG, {
     ...ctaControls,
 })
 
+/* ------------------------------------------------ 6b. Aus einer Hand */
+
+/**
+ * USP-Modul (Termin 30.09., WP-04): Elektrik und Heizung aus einer Hand.
+ * Bewusst ohne Wettbewerber – der Vorteil wird positiv formuliert.
+ *
+ * @framerSupportedLayoutWidth any
+ * @framerSupportedLayoutHeight auto
+ */
+export function AusEinerHand(props: Base & { pill: string; kartenTitel: string; punkte: { text: string }[] }) {
+    const {
+        pill = "Aus einer Hand",
+        heading = "Heizung und Elektrik aus einer Hand",
+        intro = "Eine Wärmepumpe ist nicht nur Heiztechnik. Oft müssen auch Zählerschrank, Absicherung oder Leitungswege angepasst werden. Bei uns planen Elektro- und SHK-Meister gemeinsam. Deshalb steht die Elektrik von Anfang an in Ihrem Angebot.",
+        kartenTitel = "Ihr Vorteil",
+        punkte: punkteIn = D_AUSEINERHAND_PUNKTE,
+        ctaLabel = CTA_DEFAULT, ctaNote = NOTE_DEFAULT, showCta = true, style,
+    } = props
+    const punkte = Array.isArray(punkteIn) && punkteIn.length ? punkteIn : D_AUSEINERHAND_PUNKTE
+    const { headingId, scope: s } = useScope("ed-aeh")
+    const css = baseCss(s, tokens.color.surface) + `
+.${s}__grid { display: grid; grid-template-columns: minmax(0,1fr); gap: ${tokens.space[6]}px; align-items: center; }
+.${s}__grid .${s}__head { margin: 0; }
+.${s}__icons { display: flex; gap: 10px; margin-top: ${tokens.space[5]}px; }
+.${s}__ic { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background: #EAF0FC; color: ${tokens.color.primary}; }
+.${s}__plus { align-self: center; font-family: ${fontFamily.heading}; font-size: 1.25rem; font-weight: 700; color: ${tokens.color.primary}; }
+.${s}__card { padding: ${tokens.space[5]}px; border-radius: ${tokens.radius.lg}px; background: ${tokens.color.surfaceAlt}; border: 1px solid ${tokens.color.line}; }
+.${s}__ct { margin: 0; font-family: ${fontFamily.heading}; font-size: clamp(1.15rem, 2cqi, 1.4rem); font-weight: 700; color: ${tokens.color.text}; }
+.${s}__list { margin: ${tokens.space[4]}px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.${s}__list li { display: flex; gap: 12px; align-items: flex-start; font-size: 1.0625rem; line-height: 1.45; color: ${tokens.color.text}; }
+.${s}__list svg { flex: 0 0 auto; margin-top: 3px; color: ${tokens.color.success}; }
+@container (min-width: ${breakpoints.tablet}px) { .${s}__card { padding: ${tokens.space[6]}px; } }
+@container (min-width: ${breakpoints.desktop}px) { .${s}__grid { grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: ${tokens.space[8]}px; } }
+`
+    return (
+        <section lang="de" aria-labelledby={headingId} className={s} style={style}>
+            <style dangerouslySetInnerHTML={styleHtml(css)} />
+            <div className={`${s}__inner`}>
+                <div className={`${s}__grid`}>
+                    <div>
+                        <Head s={s} id={headingId} pill={pill} heading={heading} intro={intro} />
+                        <div className={`${s}__icons`} aria-hidden="true">
+                            <span className={`${s}__ic`}><Flame /></span>
+                            <span className={`${s}__plus`}>+</span>
+                            <span className={`${s}__ic`}><Bolt /></span>
+                        </div>
+                    </div>
+                    <div className={`${s}__card`}>
+                        <h3 className={`${s}__ct`}>{kartenTitel}</h3>
+                        <ul className={`${s}__list`}>
+                            {punkte.map((x, i) => <li key={i}><Check /> <span>{x.text}</span></li>)}
+                        </ul>
+                    </div>
+                </div>
+                {showCta && <Cta s={s} label={ctaLabel} note={ctaNote} modul="aus_einer_hand" />}
+            </div>
+        </section>
+    )
+}
+addPropertyControls(AusEinerHand, {
+    pill: { type: ControlType.String, title: "Label", defaultValue: "Aus einer Hand" },
+    heading: { type: ControlType.String, title: "H2", displayTextArea: true, defaultValue: "Heizung und Elektrik aus einer Hand" },
+    intro: { type: ControlType.String, title: "Text", displayTextArea: true, defaultValue: "Eine Wärmepumpe ist nicht nur Heiztechnik. Oft müssen auch Zählerschrank, Absicherung oder Leitungswege angepasst werden. Bei uns planen Elektro- und SHK-Meister gemeinsam. Deshalb steht die Elektrik von Anfang an in Ihrem Angebot." },
+    kartenTitel: { type: ControlType.String, title: "Karten-Titel", defaultValue: "Ihr Vorteil" },
+    punkte: { type: ControlType.Array, defaultValue: D_AUSEINERHAND_PUNKTE, title: "Punkte", control: { type: ControlType.Object, controls: { text: { type: ControlType.String, title: "Text" } } } },
+    ...ctaControls,
+})
+
 /* ------------------------------------------------ 7. Bewertungen */
 
 /**
@@ -635,3 +710,5 @@ const Arrow = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
 const Check = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
 const Info = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flex: "0 0 auto", marginTop: 1 }}><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 16.5h.01" /></svg>
 const Seal = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6" /><path d="M9 14.5 8 22l4-2 4 2-1-7.5" /><polyline points="9.5 9 11.3 10.8 14.5 7.6" /></svg>
+const Flame = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3c.5 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5.3 1.6 1.2 2.6 2.3 2.8C11 9 11.2 6 12 3z" /></svg>
+const Bolt = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" /></svg>
