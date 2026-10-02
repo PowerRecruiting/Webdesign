@@ -16,7 +16,7 @@ Framer-Projekt „ED-Elektro“ (GRncpWfUFfXslEuDw7mt). Beide Seiten als **Entwu
 5. **In 3 Schritten** (`SchritteBilder`) – mit Bildern, abwechselnd
 6. **6 Gründe** (`Vorteile`)
 7. **Wärmepumpe vs. Gas/Öl** (`HeizungsVergleich`) – Beispielwerte, alle editierbar
-8. **Produkt** (`ProduktMHG`) – Eckdaten, Bild aus eigenem Projekt
+8. **Produkte** (`ProduktAuswahl`) – Buderus Logatherm WLW186i AR (Empfehlung) + MHG ecoWP 2Xe (günstige Alternative); Bildfelder „Bild Produkt 1/2“. Das alte `ProduktMHG` ist ausgeblendet.
 8b. **Heizung und Elektrik aus einer Hand** (`AusEinerHand`, WP-04) – Textvorschlag, **Freigabe Jemmy offen**
 9. Warum Ihre Nachbarn ED Elektro wählen (`Comparison`)
 10. Preis und Leistungsumfang (`PriceTransparency`)

@@ -1,5 +1,5 @@
 import { addPropertyControls, ControlType } from "framer"
-import { useId } from "react"
+import { Fragment, useId } from "react"
 import type { CSSProperties, ReactNode } from "react"
 import { balancedText, breakpoints, fontFamily, styleHtml, tokens } from "https://framer.com/m/tokens-x6g0t9.js@tWKhZJ2SyC5SsFax1CzI"
 import { trackCta, withQuery } from "https://framer.com/m/tracking-JmBWDZ.js@lcHsNL6PUwr6EaepsGIe"
@@ -67,7 +67,8 @@ const D_PRODUKTMHG_DATEN = [
  *   SchritteBilder    „In 3 Schritten …“ mit Bildern, abwechselnd
  *   Vorteile          6 nummerierte Gründe
  *   HeizungsVergleich Wärmepumpe vs. Gas/Öl (Beispielwerte, editierbar)
- *   ProduktMHG        Produktmodul mit Eckdaten
+ *   ProduktMHG        Produktmodul mit Eckdaten (ersetzt durch ProduktAuswahl)
+ *   ProduktAuswahl    Zwei Geräte: Empfehlung (Buderus) + günstige Alternative (MHG)
  *   AusEinerHand      USP: Elektro- und SHK-Meister planen gemeinsam
  *   Bewertungen       Google-Bewertung + echte Kundenstimmen (Liste startet leer)
  */
@@ -564,6 +565,132 @@ addPropertyControls(ProduktMHG, {
     kennzahlen: { type: ControlType.Array, defaultValue: D_PRODUKTMHG_KENNZAHLEN, title: "Kennzahlen", maxCount: 3, control: { type: ControlType.Object, controls: { wert: { type: ControlType.String, title: "Wert" }, label: { type: ControlType.String, title: "Label" } } } },
     daten: { type: ControlType.Array, defaultValue: D_PRODUKTMHG_DATEN, title: "Eckdaten", control: { type: ControlType.Object, controls: { label: { type: ControlType.String, title: "Bezeichnung" }, wert: { type: ControlType.String, title: "Wert" } } } },
     hinweis: { type: ControlType.String, title: "Hinweis", defaultValue: "Wir sind an keinen Hersteller gebunden – auf Wunsch planen wir auch mit anderen Marken." },
+    ...ctaControls,
+})
+
+/* ------------------------------------------------ 6a. Produktauswahl */
+
+type Produkt = { badge: string; hersteller: string; modell: string; text: string; punkte: string; daten: string; hervorheben: boolean }
+
+const D_PRODUKT_1: Produkt = {
+    badge: "Unsere Empfehlung",
+    hersteller: "Buderus",
+    modell: "Logatherm WLW186i AR",
+    text: "Besonders leise Luft-Wasser-Wärmepumpe für Modernisierung und Neubau. Die kompakte Außeneinheit passt unter jedes Fenster.",
+    punkte: "Extrem leise durch SILENT plus Technologie\nNatürliches Kältemittel R290 (Propan)\nTestsieger bei Stiftung Warentest\nBedienung und Überblick per App MyBuderus",
+    daten: "Bauart: Innen- und Außeneinheit\nLeistung: bis 11,5 kW (bei −7 °C)\nEffizienz: SCOP bis 4,7 (35 °C)\nWarmwasser: Speicher integriert oder extern",
+    hervorheben: true,
+}
+const D_PRODUKT_2: Produkt = {
+    badge: "Günstige Alternative",
+    hersteller: "MHG",
+    modell: "ecoWP 2Xe",
+    text: "Solide Monoblock-Wärmepumpe mit sehr gutem Preis-Leistungs-Verhältnis – für Neubau und Sanierung.",
+    punkte: "Bis 75 °C Vorlauf – auch für Heizkörper im Altbau\nNatürliches Kältemittel R290\nAußeneinheit braucht nur 0,5 m² Stellfläche\nRobustes Metallgehäuse, 5 Jahre Garantie",
+    daten: "Bauart: Monoblock\nVorlauftemperatur: bis 75 °C\nKältemittel: R290\nGarantie: 5 Jahre",
+    hervorheben: false,
+}
+
+const zeilen = (t: string) => (t || "").split("\n").map((z) => z.trim()).filter(Boolean)
+
+/**
+ * @framerSupportedLayoutWidth any
+ * @framerSupportedLayoutHeight auto
+ */
+export function ProduktAuswahl(props: Base & { pill: string; produkt1: Produkt; produkt2: Produkt; bild1?: Img; bild2?: Img; hinweis: string }) {
+    const {
+        pill = "Unsere Wärmepumpen",
+        heading = "Zwei Wärmepumpen, die wir empfehlen",
+        intro = "Wir sind an keinen Hersteller gebunden. Welches Gerät zu Ihrem Haus passt, entscheiden wir gemeinsam im Planungstermin – nach Heizlast, Heizflächen und Budget.",
+        produkt1 = D_PRODUKT_1, produkt2 = D_PRODUKT_2, bild1, bild2,
+        hinweis = "Angaben laut Hersteller. Die passende Leistungsgröße legen wir nach Ihrer Heizlast fest. Einbau, Inbetriebnahme und Wartung übernimmt unser Meisterbetrieb.",
+        ctaLabel = CTA_DEFAULT, ctaNote = NOTE_DEFAULT, showCta = true, style,
+    } = props
+    const { headingId, scope: s } = useScope("ed-pra")
+    const css = baseCss(s, tokens.color.surfaceAlt) + `
+.${s}__grid { display: grid; grid-template-columns: minmax(0,1fr); gap: ${tokens.space[5]}px; }
+.${s}__card { position: relative; display: flex; flex-direction: column; border-radius: ${tokens.radius.lg}px; background: #fff; border: 1px solid ${tokens.color.line}; overflow: hidden; }
+.${s}__card--top { border: 2px solid ${tokens.color.primary}; box-shadow: 0 12px 32px rgba(29,91,207,.12); }
+.${s}__img { aspect-ratio: 4 / 3; background: #F7F9FC; display: flex; align-items: center; justify-content: center; padding: ${tokens.space[4]}px; border-bottom: 1px solid ${tokens.color.line}; }
+.${s}__img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.${s}__ph { font-family: ${fontFamily.heading}; font-size: 1.125rem; font-weight: 600; color: #94A3B8; text-align: center; }
+.${s}__body { display: flex; flex-direction: column; flex: 1 1 auto; padding: ${tokens.space[5]}px; }
+.${s}__badge { align-self: flex-start; padding: 5px 12px; border-radius: 999px; font-size: .8125rem; font-weight: 700; letter-spacing: .02em; background: #EAF0FC; color: ${tokens.color.primary}; }
+.${s}__card--top .${s}__badge { background: ${tokens.color.primary}; color: #fff; }
+.${s}__her { margin: ${tokens.space[4]}px 0 0; font-size: .9375rem; font-weight: 600; color: #64748B; }
+.${s}__mod { margin: 2px 0 0; font-family: ${fontFamily.heading}; font-size: clamp(1.3rem, 2.4cqi, 1.6rem); font-weight: 700; line-height: 1.2; color: ${tokens.color.text}; }
+.${s}__txt { margin: ${tokens.space[3]}px 0 0; font-size: 1rem; line-height: 1.55; }
+.${s}__list { margin: ${tokens.space[4]}px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.${s}__list li { display: flex; gap: 10px; align-items: flex-start; font-size: 1rem; line-height: 1.45; color: ${tokens.color.text}; }
+.${s}__list svg { flex: 0 0 auto; margin-top: 2px; color: ${tokens.color.success}; }
+.${s}__dl { margin: ${tokens.space[5]}px 0 0; padding: ${tokens.space[4]}px 0 0; border-top: 1px solid ${tokens.color.line}; display: grid; grid-template-columns: minmax(0,auto) minmax(0,1fr); gap: 8px ${tokens.space[4]}px; font-size: .9375rem; line-height: 1.4; }
+.${s}__dl dt { color: #64748B; }
+.${s}__dl dd { margin: 0; font-weight: 600; color: ${tokens.color.text}; }
+.${s}__note { margin: ${tokens.space[5]}px 0 0; display: flex; gap: 10px; align-items: flex-start; font-size: .9375rem; line-height: 1.5; }
+@container (min-width: ${breakpoints.tablet}px) { .${s}__grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: ${tokens.space[6]}px; } .${s}__body { padding: ${tokens.space[6]}px; } }
+`
+    // Bildfläche bei beiden Karten, sobald eine ein Bild hat – sonst stehen die Karten versetzt
+    const mitBild = !!(bild1?.src || bild2?.src)
+    const karte = (p: Produkt, bild: Img | undefined, key: string) => {
+        const daten = zeilen(p.daten).map((z) => { const i = z.indexOf(":"); return i > 0 ? [z.slice(0, i).trim(), z.slice(i + 1).trim()] : ["", z] })
+        return (
+            <article key={key} className={`${s}__card` + (p.hervorheben ? ` ${s}__card--top` : "")}>
+                {mitBild && (
+                    <div className={`${s}__img`}>
+                        {bild?.src
+                            ? <img src={bild.src} srcSet={bild.srcSet} alt={bild.alt || `${p.hersteller} ${p.modell}`} loading="lazy" />
+                            : <span className={`${s}__ph`}>{p.hersteller} {p.modell}</span>}
+                    </div>
+                )}
+                <div className={`${s}__body`}>
+                    {p.badge && <span className={`${s}__badge`}>{p.badge}</span>}
+                    <p className={`${s}__her`}>{p.hersteller}</p>
+                    <h3 className={`${s}__mod`}>{p.modell}</h3>
+                    {p.text && <p className={`${s}__txt`}>{p.text}</p>}
+                    <ul className={`${s}__list`}>{zeilen(p.punkte).map((z, i) => <li key={i}><Check /> <span>{z}</span></li>)}</ul>
+                    {daten.length > 0 && (
+                        <dl className={`${s}__dl`}>{daten.map(([l, w], i) => <Fragment key={i}><dt>{l}</dt><dd>{w}</dd></Fragment>)}</dl>
+                    )}
+                </div>
+            </article>
+        )
+    }
+    return (
+        <section lang="de" aria-labelledby={headingId} className={s} style={style}>
+            <style dangerouslySetInnerHTML={styleHtml(css)} />
+            <div className={`${s}__inner`}>
+                <Head s={s} id={headingId} pill={pill} heading={heading} intro={intro} />
+                <div className={`${s}__grid`}>
+                    {karte({ ...D_PRODUKT_1, ...produkt1 }, bild1, "p1")}
+                    {karte({ ...D_PRODUKT_2, ...produkt2 }, bild2, "p2")}
+                </div>
+                {hinweis && <p className={`${s}__note`}><Info /> <span>{hinweis}</span></p>}
+                {showCta && <Cta s={s} label={ctaLabel} note={ctaNote} modul="produkt" />}
+            </div>
+        </section>
+    )
+}
+const produktControls = (d: Produkt, title: string) => ({
+    type: ControlType.Object, title, defaultValue: d,
+    controls: {
+        badge: { type: ControlType.String, title: "Badge", defaultValue: d.badge },
+        hersteller: { type: ControlType.String, title: "Hersteller", defaultValue: d.hersteller },
+        modell: { type: ControlType.String, title: "Modell", defaultValue: d.modell },
+        text: { type: ControlType.String, title: "Text", displayTextArea: true, defaultValue: d.text },
+        punkte: { type: ControlType.String, title: "Vorteile (je Zeile)", displayTextArea: true, defaultValue: d.punkte },
+        daten: { type: ControlType.String, title: "Eckdaten (Label: Wert)", displayTextArea: true, defaultValue: d.daten },
+        hervorheben: { type: ControlType.Boolean, title: "Hervorheben", defaultValue: d.hervorheben },
+    },
+})
+addPropertyControls(ProduktAuswahl, {
+    pill: { type: ControlType.String, title: "Label", defaultValue: "Unsere Wärmepumpen" },
+    heading: { type: ControlType.String, title: "H2", displayTextArea: true, defaultValue: "Zwei Wärmepumpen, die wir empfehlen" },
+    intro: { type: ControlType.String, title: "Einleitung", displayTextArea: true, defaultValue: "Wir sind an keinen Hersteller gebunden. Welches Gerät zu Ihrem Haus passt, entscheiden wir gemeinsam im Planungstermin – nach Heizlast, Heizflächen und Budget." },
+    bild1: { type: ControlType.ResponsiveImage, title: "Bild Produkt 1" },
+    produkt1: produktControls(D_PRODUKT_1, "Produkt 1") as any,
+    bild2: { type: ControlType.ResponsiveImage, title: "Bild Produkt 2" },
+    produkt2: produktControls(D_PRODUKT_2, "Produkt 2") as any,
+    hinweis: { type: ControlType.String, title: "Hinweis", displayTextArea: true, defaultValue: "Angaben laut Hersteller. Die passende Leistungsgröße legen wir nach Ihrer Heizlast fest. Einbau, Inbetriebnahme und Wartung übernimmt unser Meisterbetrieb." },
     ...ctaControls,
 })
 
