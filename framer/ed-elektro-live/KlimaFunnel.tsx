@@ -9,6 +9,26 @@ const FormContainer: any = (FramerLib as any).FormContainer
 /** Framer-Formular von /kontakt – Anfragen landen am selben Ziel (Framer › Formular › „Send To“). */
 const FORM_KONTAKT = "https://api.framer.com/forms/v1/forms/e58beef6-2917-4245-8c1d-f10c3a49a28e/submit"
 
+/** Google-Ads-Conversion „Lead-Funnel senden“ (Konto AW-866474002). Im GTM-Container gibt es dafür keinen Tag. */
+const ADS_LEAD = "AW-866474002/g_TTCOjGnogdEJKwlZ0D"
+
+/**
+ * Meldet die Conversion direkt an Google Ads – über den Google-Tag, den GTM bereits lädt.
+ * gtag() kommt aus dem Cookie-Banner (Consent Mode v2) im <head>; ohne Einwilligung
+ * sendet Google cookielos (Modellierung). transaction_id verhindert Doppelzählung.
+ */
+function sendeAdsConversion(sendTo, value, transactionId) {
+    if (typeof window === "undefined" || !sendTo) return
+    try {
+        const w = window
+        w["dataLayer"] = w["dataLayer"] || []
+        const g = typeof w["gtag"] === "function" ? w["gtag"] : function () { w["dataLayer"].push(arguments) }
+        g("event", "conversion", { send_to: sendTo, value, currency: "EUR", transaction_id: transactionId })
+    } catch {
+        // Tracking darf den Versand nie blockieren
+    }
+}
+
 /**
  * ED Elektro & Klimatechnik – Klimaanlagen-Angebotsfunnel
  *
@@ -40,6 +60,7 @@ export default function KlimaFunnel(props) {
         zGrossRaum = 400, zGeruest = 290, zDach = 720, zKanal = 30, meterProGeraet = 3,
         leadWert = 712,
         formAction = FORM_KONTAKT,
+        adsConversion = ADS_LEAD,
         webhookUrl = "",
         // Geräteauswahl. Standardmäßig AUS: Die Serienübersicht steht als
         // eigenes Modul auf der Landingpage. Dieser Schritt lässt sich über
@@ -202,7 +223,9 @@ export default function KlimaFunnel(props) {
 
     function versandOk() {
         clearTimeout(sendeTimer.current)
-        track("lead_submit", { value: leadWert, currency: "EUR", calc_raeume: a.raeume?.id })
+        const tid = "lead-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8)
+        track("lead_submit", { value: leadWert, currency: "EUR", transaction_id: tid, calc_raeume: a.raeume?.id })
+        sendeAdsConversion(adsConversion, leadWert, tid)
         setSendet(false)
         setFormDaten(null)
         setFertig(true)
@@ -517,7 +540,7 @@ function Ergebnis({ kalk, a, mwst, onWeiter }) {
                 <p style={{ ...S.unter, textAlign: "left", margin: "12px 0 0" }}>
                     Ab fünf Innengeräten ist es keine Standardanlage mehr. Der Preis hängt dann so stark
                     von der Aufteilung ab, dass eine pauschale Spanne Ihnen nicht weiterhelfen würde.
-                    Wir rechnen Ihnen das sauber durch – kostenlos und unverbindlich.
+                    Wir rechnen Ihnen das sauber durch – unverbindlich.
                 </p>
                 <button className="edk2-prim" type="button" onClick={onWeiter} style={{ marginTop: 26 }}>
                     Angebot anfordern <Chev dir="right" />
@@ -543,7 +566,7 @@ function Ergebnis({ kalk, a, mwst, onWeiter }) {
                 </span>
                 <span className="edk2-tendenz">
                     Die Spanne ergibt sich aus den baulichen Gegebenheiten. Verbindlich wird der Preis
-                    nach der kostenlosen Besichtigung vor Ort.
+                    nach der Besichtigung vor Ort.
                 </span>
             </div>
 
@@ -571,11 +594,11 @@ function Ergebnis({ kalk, a, mwst, onWeiter }) {
 
             <p className="edk2-disclaimer">
                 Diese Preisorientierung ist kein verbindliches Angebot. Ein verbindliches Festpreisangebot
-                erhalten Sie nach einer kostenlosen Besichtigung vor Ort.
+                erhalten Sie nach einer Besichtigung vor Ort.
             </p>
 
             <button className="edk2-prim" type="button" onClick={onWeiter} style={{ marginTop: 22, maxWidth: 380 }}>
-                Kostenloses Festpreisangebot anfordern <Chev dir="right" />
+                Festpreisangebot anfordern <Chev dir="right" />
             </button>
         </div>
     )
@@ -588,7 +611,7 @@ function Kontakt({ c, fehler, sendet, sendFehler, onChange, onSubmit, kalk }) {
             <p style={S.unter}>
                 {kalk.individuell
                     ? "Wir melden uns für die individuelle Planung bei Ihnen."
-                    : "Wir prüfen Ihre Angaben und melden uns für den kostenlosen Vor-Ort-Termin."}
+                    : "Wir prüfen Ihre Angaben und melden uns für den Vor-Ort-Termin."}
             </p>
 
             <div className="edk2-toggle">
@@ -623,7 +646,7 @@ function Kontakt({ c, fehler, sendet, sendFehler, onChange, onSubmit, kalk }) {
                 </div>
             )}
             <ul className="edk2-trust">
-                <li><Ic n="check" /> Kostenlos und unverbindlich</li>
+                <li><Ic n="check" /> Unverbindlich</li>
                 <li><Ic n="check" /> Eigene Monteure, keine Subunternehmer</li>
             </ul>
             <p className="edk2-legal">
@@ -652,7 +675,7 @@ function Danke({ onNeu }) {
             <span className="edk2-ok"><Ic n="check" /></span>
             <h2 style={{ ...S.titel, marginTop: 22 }}>Vielen Dank für Ihre Anfrage!</h2>
             <p style={S.unter}>
-                Wir haben Ihre Angaben erhalten und melden uns zeitnah bei Ihnen, um den kostenlosen
+                Wir haben Ihre Angaben erhalten und melden uns zeitnah bei Ihnen, um den
                 Vor-Ort-Termin abzustimmen.
             </p>
             <p className="edk2-tipp">
@@ -840,7 +863,7 @@ const CSS = `
 `
 
 const DEFAULT_CLAIMS = [
-    { text: "Kostenlos und unverbindlich" },
+    { text: "Preisorientierung kostenlos und unverbindlich" },
     { text: "Preise aus unserer Preisübersicht 2026" },
     { text: "Eigene Monteure, keine Subunternehmer" },
 ]
@@ -862,7 +885,7 @@ addPropertyControls(KlimaFunnel, {
         control: {
             type: ControlType.Object,
             controls: {
-                text: { type: ControlType.String, title: "Text", defaultValue: "Kostenlos und unverbindlich" },
+                text: { type: ControlType.String, title: "Text", defaultValue: "Preisorientierung kostenlos und unverbindlich" },
             },
         },
         defaultValue: DEFAULT_CLAIMS,
@@ -903,5 +926,6 @@ addPropertyControls(KlimaFunnel, {
     leadWert: { type: ControlType.Number, title: "Conversion-Wert €", defaultValue: 712, min: 0, max: 100000, step: 1, displayStepper: false },
     formAction: { type: ControlType.String, title: "Framer-Formular", placeholder: "Leer = kein Framer-Formular", defaultValue: FORM_KONTAKT,
         description: "Submit-URL eines Framer-Formulars. Standard: Kontaktformular." },
+    adsConversion: { type: ControlType.String, title: "Google-Ads-Conversion", placeholder: "AW-…/Label (leer = aus)", defaultValue: ADS_LEAD },
     webhookUrl: { type: ControlType.String, title: "Webhook (optional)", placeholder: "Zusätzlich an CRM o. ä.", defaultValue: "" },
 })

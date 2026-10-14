@@ -35,6 +35,14 @@ Jedes neue Modul endet mit „Preis und Förderung prüfen“ → `/waermepumpe/
 - Wieder öffnen: Footer-Link „Cookie-Einstellungen“ (`/datenschutz#cookie-einstellungen`, Scroll-Target am Embed der Datenschutzseite) oder `window.edCookieSettings()`.
 - **In GTM prüfen:** GA4- und Google-Ads-Tags respektieren Consent Mode automatisch. Tags anderer Anbieter (z. B. Meta Pixel oder Hotjar) brauchen unter „Einwilligungseinstellungen“ die zusätzliche Einwilligung `ad_storage` oder `analytics_storage`, oder sie werden über das Event `cookie_consent_update` ausgelöst.
 
+## Google-Ads-Conversion „Lead-Funnel senden“
+
+Der GTM-Container `GTM-5ZV5KQLS` (Version 3) hat keinen Tag für diese Conversion. Er enthält nur Telefon-Klick, E-Mail-Klick, Timer 2 min und Formular-Absenden auf `/kontakt`. Deshalb melden beide Funnels die Conversion nach erfolgreichem Versand selbst:
+
+- `gtag("event", "conversion", { send_to: "AW-866474002/g_TTCOjGnogdEJKwlZ0D", value, currency: "EUR", transaction_id })`. Das läuft über den Google-Tag, den GTM schon lädt. `gtag()` kommt aus dem Cookie-Banner.
+- Werte: Klima 712 €, Wärmepumpe 1.500 € (Eigenschaft „Conversion-Wert €“). Das Label steht in der Eigenschaft „Google-Ads-Conversion“, leer schaltet die Meldung ab.
+- Das dataLayer-Event `lead_submit` trägt dieselbe `transaction_id`. Falls später doch ein GTM-Tag angelegt wird: dort `transaction_id` übergeben und „Google-Ads-Conversion“ im Funnel leeren, sonst zählt die Conversion doppelt.
+
 ## Vor dem Livegang prüfen
 
 - **WP-03:** `/waermepumpe` und `/waermepumpe/preis` sind Entwürfe (Draft) und werden deshalb nicht veröffentlicht. In der Framer-Vorschau führen die Hero-Buttons (`/waermepumpe/preis?bauart=…`) ins Leere. Zum Launch bei beiden Seiten „Draft“ ausschalten, veröffentlichen und auf der Live-URL mobil und am Desktop bis zum Versand durchklicken.

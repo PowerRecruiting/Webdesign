@@ -9,6 +9,26 @@ const FormContainer: any = (FramerLib as any).FormContainer
 /** Framer-Formular von /kontakt – Anfragen landen am selben Ziel (Framer › Formular › „Send To“). */
 const FORM_KONTAKT = "https://api.framer.com/forms/v1/forms/e58beef6-2917-4245-8c1d-f10c3a49a28e/submit"
 
+/** Google-Ads-Conversion „Lead-Funnel senden“ (Konto AW-866474002). Im GTM-Container gibt es dafür keinen Tag. */
+const ADS_LEAD = "AW-866474002/g_TTCOjGnogdEJKwlZ0D"
+
+/**
+ * Meldet die Conversion direkt an Google Ads – über den Google-Tag, den GTM bereits lädt.
+ * gtag() kommt aus dem Cookie-Banner (Consent Mode v2) im <head>; ohne Einwilligung
+ * sendet Google cookielos (Modellierung). transaction_id verhindert Doppelzählung.
+ */
+function sendeAdsConversion(sendTo, value, transactionId) {
+    if (typeof window === "undefined" || !sendTo) return
+    try {
+        const w = window
+        w["dataLayer"] = w["dataLayer"] || []
+        const g = typeof w["gtag"] === "function" ? w["gtag"] : function () { w["dataLayer"].push(arguments) }
+        g("event", "conversion", { send_to: sendTo, value, currency: "EUR", transaction_id: transactionId })
+    } catch {
+        // Tracking darf den Versand nie blockieren
+    }
+}
+
 /**
  * ED Elektro & Klimatechnik – Wärmepumpen-Funnel mit Heizlast-Schätzung
  *
@@ -49,6 +69,7 @@ export default function WaermepumpenFunnel(props) {
         foerderMax = 22400,
         startTermin = false,
         formAction = FORM_KONTAKT,
+        adsConversion = ADS_LEAD,
         webhookUrl = "",
         telefon = "06732 600 7358",
         style,
@@ -218,7 +239,9 @@ export default function WaermepumpenFunnel(props) {
 
     function versandOk() {
         clearTimeout(sendeTimer.current)
-        track("lead_submit", { value: leadWert, currency: "EUR", calc_klasse_kw: kalk.klasse?.kw })
+        const tid = "lead-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8)
+        track("lead_submit", { value: leadWert, currency: "EUR", transaction_id: tid, calc_klasse_kw: kalk.klasse?.kw })
+        sendeAdsConversion(adsConversion, leadWert, tid)
         setSendet(false)
         setFormDaten(null)
         setFertig(true)
@@ -970,5 +993,6 @@ addPropertyControls(WaermepumpenFunnel, {
     telefon: { type: ControlType.String, title: "Telefon", defaultValue: "06732 600 7358" },
     formAction: { type: ControlType.String, title: "Framer-Formular", placeholder: "Leer = kein Framer-Formular", defaultValue: FORM_KONTAKT,
         description: "Submit-URL eines Framer-Formulars. Standard: Kontaktformular." },
+    adsConversion: { type: ControlType.String, title: "Google-Ads-Conversion", placeholder: "AW-…/Label (leer = aus)", defaultValue: ADS_LEAD },
     webhookUrl: { type: ControlType.String, title: "Webhook (optional)", placeholder: "Zusätzlich an CRM o. ä.", defaultValue: "" },
 })
