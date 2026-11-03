@@ -43,6 +43,10 @@ Der GTM-Container `GTM-5ZV5KQLS` (Version 3) hat keinen Tag für diese Conversio
 - Werte: Klima 712 €, Wärmepumpe 1.500 € (Eigenschaft „Conversion-Wert €“). Das Label steht in der Eigenschaft „Google-Ads-Conversion“, leer schaltet die Meldung ab.
 - Das dataLayer-Event `lead_submit` trägt dieselbe `transaction_id`. Falls später doch ein GTM-Tag angelegt wird: dort `transaction_id` übergeben und „Google-Ads-Conversion“ im Funnel leeren, sonst zählt die Conversion doppelt.
 
+## Startseite: Modul „Schwerpunkte“
+
+`Schwerpunkte.tsx` steht auf `/` direkt unter der Bewertungsleiste (Ratings), in allen drei Breakpoints. Es enthält zwei Karten mit je einem Button zur Themen-Seite (`/klimaanlage`, `/waermepumpe`) und einem Button zum Preisrechner. Tracking: `cta_click` mit `module = startseite_klima | startseite_waermepumpe (+ _rechner)`; Kampagnen-Parameter werden an den Link gehängt. Bildfelder sind optional, ohne Bild zeigt die Karte nur das Icon.
+
 ## Vor dem Livegang prüfen
 
 - **WP-03:** `/waermepumpe` und `/waermepumpe/preis` sind Entwürfe (Draft) und werden deshalb nicht veröffentlicht. In der Framer-Vorschau führen die Hero-Buttons (`/waermepumpe/preis?bauart=…`) ins Leere. Zum Launch bei beiden Seiten „Draft“ ausschalten, veröffentlichen und auf der Live-URL mobil und am Desktop bis zum Versand durchklicken.
